@@ -48,3 +48,33 @@ FILE
 
 🌈 Have fun 🌈
 """
+
+from altreFunzioni import *
+from core import *
+from parteIniziale import acquista_merci_mock, acquista_provviste_mock, ingaggia_equipaggio_mock
+
+def ingaggio_completato():
+    equipaggio["marinaio"]["numero"] = ingaggia_equipaggio_mock()["marinaio"]
+    equipaggio["cuoco"]["numero"] = ingaggia_equipaggio_mock()["cuoco"]
+    equipaggio["meccanico"]["numero"] = ingaggia_equipaggio_mock()["meccanico"]
+    equipaggio["medico"]["numero"] = ingaggia_equipaggio_mock()["medico"]
+    equipaggio["navigatore"]["numero"] = ingaggia_equipaggio_mock()["navigatore"]
+
+def provviste_completate():
+    provviste["verdura"]["numero"] = acquista_provviste_mock()["verdura"]
+    provviste["frutta"]["numero"] = acquista_provviste_mock()["frutta"]
+    provviste["carne"]["numero"] = acquista_provviste_mock()["carne"]
+    provviste["acqua"]["numero"] = acquista_provviste_mock()["acqua"]
+
+def merci_completate():
+    merci["medicinale"]["numero"] = acquista_merci_mock()["medicinale"]
+    merci["armi"]["numero"] = acquista_merci_mock()["armi"]
+    merci["sale"]["numero"] = acquista_merci_mock()["sale"]
+    merci["stoffa"]["numero"] = acquista_merci_mock()["stoffa"]
+    merci["coltelli"]["numero"] = acquista_merci_mock()["coltelli"]
+    merci["diamanti"]["numero"] = acquista_merci_mock()["diamanti"]
+
+ingaggio_completato()
+provviste_completate()
+merci_completate()
+costo_equipaggio = calcola_costo_equipaggio()

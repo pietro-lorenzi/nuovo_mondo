@@ -78,3 +78,5 @@ ingaggio_completato()
 provviste_completate()
 merci_completate()
 costo_equipaggio = calcola_costo_equipaggio()
+
+nessun_imprevisto()

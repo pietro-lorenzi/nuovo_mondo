@@ -76,6 +76,11 @@ merci = {
     },
 }
 
+viaggio = {
+    "settimana attuale": 0,
+    "settimane totali": 8,
+    "morale": 0
+}
 
 # ---------- FUNZIONI CALCOLO ----------
 
@@ -86,16 +91,10 @@ def calcola_costo_equipaggio(): #TODO sistemare
     return costo_totale
 
 
-# ---------- EVENTI ----------
-
-#TODO controllare che nelle selezioni casuali di morti della ciurma siano presenti effettivamente membri di quella classe
+# --------------- EVENTI ---------------
 
 def uomo_in_mare():
-    ciurma = ["marinaio", "cuoco", "meccanico", "medico", "navigatore"]
-    acc = []
-    for i in ciurma:
-        if equipaggio[i]["numero"] > 0:
-            acc.append(i)
+    acc = ciurma_accettabile(equipaggio)
     morto = rn.choice(acc)
     stampa("Oh no! Un onda anomala si è scagliata sulla nave!")
     stampa(f"Un {morto} è caduto in mare ed è affogato!")
@@ -144,7 +143,8 @@ def tempesta_miracolosa():
 def venti_favorevoli():
     stampa("Venti favorevoli permettono alla nave di navigare più velocemente!")
     stampa("Il viaggio si accorcia di una settimana, e il tuo equipaggio sembra esserne felice")
-    #TODO gestire morale e settimane
+    viaggio["settimane totali"] -= 1
+    viaggio["morale"] += rn.randint(5,15)
 
 def cattivo_tempo():
     stampa("Settimana influenzata dal cattivo tempo!")
@@ -257,15 +257,34 @@ def attacco_pirata():
         stampa(f"Sfortunatamente siete stati colti impreparati, avete perso {uomini_persi} membri!")
         stampa("I morti sono:")
         for i in range(uomini_persi):
-            morto = rn.choice("marinaio", "meccanico", "medico", "cuoco", "navigatore")
+            acc = ciurma_accettabile(equipaggio)
+            morto = rn.choice(acc)
             equipaggio[morto]["numero"] -= 1
             stampa(morto)
 
 def danni_al_timone():
-    pass
+    stampa("Durante la navigazione si sono verificati dei danni al timone!")
+    if equipaggio["meccanico"]["numero"] > 0:
+        viaggio["settimane totali"] += 1
+        stampa("Fortunatamente nel tuo equipaggio è presente un meccanico, che riesce a riparare in fretta.")
+        stampa("Il viaggio si allunga di una sola settimana")
+    else:
+        aumento = rn.randint(2,4)
+        viaggio["settimane totali"] += aumento
+        stampa("Nel tuo equipaggio non è presente neanche un meccanico, è quindi compito del resto della ciurma aggiustare il timone alla bell'e meglio")
+        stampa(f"Il viaggio si allunga di {aumento} settimane")
 
 def raffiche_di_vento():
-    pass
+    stampa("Durante la navigazione si sono verificate delle forti raffiche di vento!")
+    if equipaggio["navigatore"]["numero"] > 0:
+        viaggio["settimane totali"] += 1
+        stampa("Fortunatamente nel tuo equipaggio è presente un navigatore, che riesce a rimettere nella giusta rotta la nave!")
+        stampa("Il viaggio si allunga di una sola settimana")
+    else:
+        aumento = rn.randint(2,4)
+        viaggio["settimane totali"] += aumento
+        stampa("Nel tuo equipaggio non è presente neanche un navigatore, e di conseguenza il resto della ciurma prova a tornare in rotta, senza però girare un po' a vuoto")
+        stampa(f"Il viaggio si allunga di {aumento} settimane")
 
 def avvistamento_isola(alabatro):
     stampa("TERRAAAAAAAAAAAAAAAAAAA!!!!!!!!")
@@ -303,4 +322,11 @@ def avvistamento_isola(alabatro):
             return False
 
 def nessun_imprevisto():
+    stampa("Durante questa settimana di navigazione non si è verificato nessun imprevisto.")
+    stampa("La calma prima della tempesta?", 0.1)
+
+
+# ---------- CONTROLLO SCORTE ----------
+
+def controllo_scorte():
     pass

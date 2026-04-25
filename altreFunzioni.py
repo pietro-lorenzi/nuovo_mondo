@@ -1,12 +1,13 @@
 import sys
 import time
 
-def stampa(testo, delay=0.03): #funzione per stampare il testo lentamente, in modo più figo
+def stampa(testo, delay=0.04, capo=True): #funzione per stampare il testo lentamente, in modo più figo
     for i in testo:
         sys.stdout.write(i)
         sys.stdout.flush()
         time.sleep(delay)
-    print()
+    if capo:
+        print()
 
 def ciurma_accettabile(diz): #funzione per definire quali membri della ciurma sono effettivamente presenti
     ciurma = ["marinaio", "cuoco", "meccanico", "medico", "navigatore"]

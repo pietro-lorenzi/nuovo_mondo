@@ -1,5 +1,8 @@
 from altreFunzioni import *
 import random as rn
+from time import sleep
+
+#TODO termcolor
 
 # ---------- STRUTTURE DATI ----------
 
@@ -79,7 +82,7 @@ merci = {
 viaggio = {
     "settimana attuale": 0,
     "settimane totali": 8,
-    "morale": 0
+    "morale": 100
 }
 
 # ---------- FUNZIONI CALCOLO ----------
@@ -96,47 +99,63 @@ def calcola_costo_equipaggio(): #TODO sistemare
 def uomo_in_mare():
     acc = ciurma_accettabile(equipaggio)
     morto = rn.choice(acc)
-    stampa("Oh no! Un onda anomala si è scagliata sulla nave!")
-    stampa(f"Un {morto} è caduto in mare ed è affogato!")
-    stampa("Pace all'anima sua.")
+    stampa("Lentamente, dall'orizzonte, un navigatore scorge un onda anomala.")
+    stampa("Prima che chiunque possa reagire, l'onda si abbatte violentemente sulla nave.", 0.05)
+    stampa(f"Un {morto} cade tra le fauci dell'oceano.")
+    sleep(2)
+    stampa("Nessuno ha più il coraggio di guardare indietro...", 0.1)
 
 def verdura_in_mare():
-    stampa("Una violenta tempesta si abbatte sulla nave!")
     denom = rn.choice([2,3,4,5])
     perdita = provviste["verdura"]["numero"] // denom
     provviste["verdura"]["numero"] -= perdita
-    stampa(f"Sfortunatamente {perdita} unità di verdura cadono in mare!")
+    stampa("In pochi minuti, il cielo si oscura.")
+    stampa("Rombi e tuoni rieccheggiano in lontananza.")
+    stampa(f"Le onde divorano {perdita} unità di verdura cadere in mare.")
+    stampa("La fame vi attende, ", 0.05, False)
+    sleep(0.5)
+    stampa("inesorabilmente", 0.2)
 
 def frutta_in_mare():
-    stampa("Una violenta tempesta si abbatte sulla nave!")
     denom = rn.choice([2,3,4,5])
     perdita = provviste["frutta"]["numero"] // denom
     provviste["frutta"]["numero"] -= perdita
-    stampa(f"Sfortunatamente {perdita} unità di frutta cadono in mare!")
+    stampa("La furia del mare non conosce pietà.")
+    stampa("Potente come un colpo di cannone, un onda si abbatte sullo scafo.")
+    stampa(f"Dalla nave scivolano {perdita} unità di frutta.")
+    stampa("Anche oggi il mare si è divorato qualcosa di tuo...")
+    stampa("E il prossimo potresti", capo=False)
+    stampa(" essere tu.", 0.2)
 
 def carne_in_mare():
-    stampa("Una violenta tempesta si abbatte sulla nave!")
     denom = rn.choice([2,3,4,5])
     perdita = provviste["carne"]["numero"] // denom
     provviste["carne"]["numero"] -= perdita
-    stampa(f"Sfortunatamente {perdita} unità di carne cadono in mare!")
+    stampa("Avverti l'arrivo di una tempesta in lontananza.")
+    stampa("In pochi minuti, ti ritrovi in balia delle onde.")
+    stampa(f"Lentamente, {perdita} unità di carne scivolano giù dalla nave.")
+    stampa("I predatori del mare ricevono un banchetto gratis.")
+    stampa("E tu rimarrai a guardare.")
 
 def acqua_in_mare():
-    stampa("Una violenta tempesta si abbatte sulla nave!")
+    stampa("La furia del mare non conosce pietà.")
     denom = rn.choice([2,3,4,5])
     perdita = provviste["acqua"]["numero"] // denom
     provviste["acqua"]["numero"] -= perdita
-    stampa(f"Sfortunatamente {perdita} unità di acqua cadono in mare!")
+    stampa(f"L'urto con uno scoglio non danneggia la nave, ma rovescia in mare {perdita} barili d'acqua.")
+    stampa("Gli sguardi dell'equipaggio si fanno più cupi.")
+    stampa("Sanno cosa significa razionare l'acqua.")
+    stampa("Sanno cosa gli uomini disperati sono capaci di fare.")
 
 def pesca_miracolosa():
     stampa("Settimana tranquilla, l'equipaggio decide di approfittarne per pescare.")
-    pesca = rn.int(11,20)
+    pesca = rn.randint(11,20)
     provviste["carne"]["numero"] += pesca
     stampa(f"Il tuo equipaggio è riuscito a pescare {pesca} kili di carne!")
 
 def tempesta_miracolosa():
     stampa("Una tempesta irrompe, ma il tuo equipaggio si fa trovare pronto e posiziona strategicamente i barili per raccogliere l'acqua piovana")
-    acqua = rn.int(11,20)
+    acqua = rn.randint(11,20)
     provviste["acqua"]["numero"] += acqua
     stampa(f"Il tuo equipaggio è riuscito a pescare {acqua} litri di acqua!")
 
@@ -168,7 +187,7 @@ def infestazione_ratti():
     stampa(f"Sfortunatamente {perdita} stoffe vengono rosicchiate dai topi!")
 
 def avvistamento_alabatro():
-    if merci["armi"] > 0:
+    if merci["armi"]["numero"] > 0:
             stampa("Durante la navigazione avvistate un alabatro!")
             stampa("Fortunatamente avete delle armi a bordo, ora potete provare a colpirlo per aumentare le scorte di carne!")
             ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
@@ -180,7 +199,7 @@ def avvistamento_alabatro():
             
             if colpito:
                 carne_guadagnata = rn.randint(10, 15)
-                merci["carne"]["numero"] += carne_guadagnata
+                provviste["carne"]["numero"] += carne_guadagnata
                 stampa(f"Complimenti, siete riusciti a colpire l'alabatro e avete guadagnato {carne_guadagnata} unità di carne!")
                 return True
             else:
@@ -206,16 +225,16 @@ def avvistamento_scialuppa():
                 merci[i]["numero"] += rn.randint(10,20)
             stampa("Inoltre, all'interno della cassa trovate delle merci preziose che aumentano le vostre scorte!")
             errore = False
-        else:
+        elif scelta == "no":
             stampa("Decidete di non salvare i 4 uomini e proseguite la navigazione, chissà cosa c'era nella cassa...")
             errore = False
 
 def epidemia():
     stampa("Durante la navigazione scoppia una terribile epidemia a bordo!")
     medicine = merci["medicinale"]["numero"]
+    ammalati = []
     if medicine > 0:
         stampa(f"Fortunatamente hai a disposizione {medicine} medicinali, e hai curato altrettanti membri del tuo equipaggio")
-        ammalati = []
         for i in equipaggio:
             ripetizioni = equipaggio[i]["numero"]
             for x in range(ripetizioni):
@@ -249,7 +268,7 @@ def attacco_pirata():
     stampa("Durante la navigazione siete stati attaccati dai pirati!")
     numero_pirati = rn.randint(3,10)
     ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
-    numero_difensori = min(equipaggio, merci["armi"]["numero"])
+    numero_difensori = min(ciurma, merci["armi"]["numero"])
     uomini_persi = min(numero_pirati-numero_difensori, ciurma)
     if uomini_persi <= 0:
         stampa(f"I pirati erano ben {numero_pirati}, ma grazie a un equipaggio corposo e a un buon numero di armi siete riusciti a difendervi!")
@@ -295,30 +314,32 @@ def avvistamento_isola(alabatro):
         scelta = input(">> ").lower().strip()
         if scelta in ["si", "s", "y"]:
             errore = False
-            abitata = rn.choice(True, False)
+            abitata = rn.choice([True, False])
             if abitata:
-                ostili = rn.choice(True, False)
+                ostili = rn.choice([True, False])
                 if ostili:
                     stampa("L'isola era abitata da dei locali ostili, meglio darsela a gambe!")
                 else:
                     stampa("Che fortuna! L'isola era abitata da locali pacifici!")
-                    stampa("Gli siete sembrati simpatici e hannod eciso di regalarvi le seguenti risorse:")
+                    stampa("Gli siete sembrati simpatici e hanno deciso di regalarvi le seguenti risorse:")
                     if alabatro:
                         for i in ["medicinale", "armi", "sale", "stoffa", "diamanti", "coltelli"]:
-                            x = rn.int(5,20)
+                            x = rn.randint(5,20)
                             merci[i]["numero"] += x
                             stampa(f"{i} - {x} unità")
                     else:
                         for i in ["medicinale", "armi", "sale", "stoffa", "diamanti", "coltelli"]:
-                            x = rn.int(20,40)
+                            x = rn.randint(20,40)
                             merci[i]["numero"] += x
                             stampa(f"{i} - {x} unità")
             else:
                 stampa("L'isola non era abitata, l'esplorazione si è rivelata vana.")
+            errore = False
             return True
         elif scelta in ["no", "n"]:
             stampa("Hai deciso di non esplorare l'isola.")
             stampa("Non ti piace perdere tempo, ma chissà cosa avresti potuto trovarci...")
+            errore = False
             return False
 
 def nessun_imprevisto():
@@ -328,5 +349,49 @@ def nessun_imprevisto():
 
 # ---------- CONTROLLO SCORTE ----------
 
-def controllo_scorte():
+def rimuovi_scorte():
+    ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
+    for i in provviste:
+        provviste[i]["numero"] -= provviste[i]["consumo"]*ciurma
+
+def calcolo_scorte_viaggio():
+    ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
+    for i in provviste:
+        if provviste[i]["numero"] <= 0:
+            stampa(f"Hai esaurito le razioni di {i}, la tua ciurma non ne sarà felice...")
+            #TODO morale
+        
+        if provviste[i]["numero"] < provviste[i]["consumo"]*ciurma:
+            stampa(f"Le scorte attuali di {i} non sono sufficienti a coprire tutta la durata del viaggio.")
+            stampa(f"Intendi dimezzarle?")
+            errore = True
+            while errore:
+                scelta = input(">> ").strip().lower()
+                if scelta in ["si", "s", "y"]:
+                    provviste[i]["consumo"] /= 2
+                    #TODO Gestione morale (-5 punti a settimana)
+                    errore = False
+                elif scelta in ["no", "n"]:
+                    errore = False
+                else:
+                    stampa("Scelta non accettabile")
+        
+        elif provviste[i]["numero"] > provviste[i]["consumo"]*ciurma*2:
+            stampa(f"Le scorte attuali di {i} sono abbondanti, intendi raddoppiare le razioni?")
+            errore = True
+            while errore:
+                scelta = input(">> ").strip().lower()
+                if scelta in ["si", "s", "y"]:
+                    provviste[i]["consumo"] *= 2
+                    #TODO Gestione morale (+5 punti a settimana)
+                    errore = False
+                elif scelta in ["no", "n"]:
+                    errore = False
+                else:
+                    stampa("Scelta non accettabile")
+
+
+# --------------- MORALE ---------------
+
+def aggiornamento_morale():
     pass

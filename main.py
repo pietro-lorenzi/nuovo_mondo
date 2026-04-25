@@ -51,7 +51,8 @@ FILE
 
 from altreFunzioni import *
 from core import *
-from parteIniziale import acquista_merci_mock, acquista_provviste_mock, ingaggia_equipaggio_mock
+from parteIniziale import *
+from time import sleep
 
 def ingaggio_completato():
     equipaggio["marinaio"]["numero"] = ingaggia_equipaggio_mock()["marinaio"]
@@ -78,5 +79,3 @@ ingaggio_completato()
 provviste_completate()
 merci_completate()
 costo_equipaggio = calcola_costo_equipaggio()
-
-nessun_imprevisto()

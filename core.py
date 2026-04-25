@@ -148,22 +148,36 @@ def acqua_in_mare():
     stampa("Sanno cosa gli uomini disperati sono capaci di fare.")
 
 def pesca_miracolosa():
-    stampa("Settimana tranquilla, l'equipaggio decide di approfittarne per pescare.")
+    stampa("Il mare si stende davanti a voi come un grande telo blu.")
+    stampa("Il silenzio è assordante, non un onda, non un gabbiano, e neanche la nave osa schricchiolare.")
+    stampa("Qualcuno dice che è un buon segno, e decidete di approfittarne per pescare.")
     pesca = rn.randint(11,20)
     provviste["carne"]["numero"] += pesca
-    stampa(f"Il tuo equipaggio è riuscito a pescare {pesca} kili di carne!")
+    stampa(f"Riuscite a recuperare {pesca} kili di carne. Strano...")
+    stampa("Erano ammassati lì sotto...")
+    stampa("Come ad aspettarvi", 0.08, capo=False)
+    stampa("...", 0.5)
 
 def tempesta_miracolosa():
-    stampa("Una tempesta irrompe, ma il tuo equipaggio si fa trovare pronto e posiziona strategicamente i barili per raccogliere l'acqua piovana")
+    stampa("Una tempesta viene avvistata in lontananza, ma sta volta è diverso.")
     acqua = rn.randint(11,20)
     provviste["acqua"]["numero"] += acqua
-    stampa(f"Il tuo equipaggio è riuscito a pescare {acqua} litri di acqua!")
+    stampa("Non c'è vento a precederla. Non c'è rabbia nell'aria.")
+    stampa("Poi inizia a piovere, gocce grosse, rumorose, costanti.")
+    stampa(f"Ordini all'equipaggio di posizionare i barili, e raccogliete {acqua} litri di acqua.")
+    stampa("Sembra quasi che il mare abbia deciso di risparmiarvi questa volta, eppure esiste un detto tra voi uomini di mare...")
+    stampa("Se sopravvivi alla tempesta, non ringraziare, perché significa che ", capo=False)
+    stampa("non è finita.", 0.2)
 
 def venti_favorevoli():
-    stampa("Venti favorevoli permettono alla nave di navigare più velocemente!")
-    stampa("Il viaggio si accorcia di una settimana, e il tuo equipaggio sembra esserne felice")
+    stampa("In una fredda mattina ti accorgi che dei venti favorevoli stanno spingendo la nave più velocemente.")
+    stampa("L'equipaggio ne è felice, festeggia perché arriverai prima a destinazione.")
     viaggio["settimane totali"] -= 1
     viaggio["morale"] += rn.randint(5,15)
+    stampa("Eppure vedi un uomo, seduto rannicchiato cupo in un angolo della cabina.")
+    stampa("Gli domandi cosa c'è che non va, e perché non è a festeggiare con gli altri.")
+    stampa("E lui ti risponde: ", capo=False)
+    stampa("Sta andando esattamente come deve andare...", 0.1)
 
 def cattivo_tempo():
     stampa("Settimana influenzata dal cattivo tempo!")

@@ -9,13 +9,39 @@
 # e alla fine deve restituire un dizionario, proprio come vedi nelle mie funzioni mock
 
 def ingaggia_equipaggio_mock():
-    return {
-        "marinaio": 4,
-        "meccanico": 3,
-        "medico": 2,
-        "cuoco": 2,
-        "navigatore": 2
+    eq= {
+        "marinaio": 0,
+        "meccanico": 0,
+        "medico": 0,
+        "cuoco": 0,
+        "navigatore": 0
     }
+    marinario=0
+    while marinario<1:
+        print("quanti marinai vuoi?")
+        marinario=int(input())
+        eq["marinaio"]=marinario
+    meccanico=0
+    while meccanico<1:
+        print("quanti meccanici vuoi?")
+        meccanico=int(input())
+        eq["meccanico"]=meccanico
+    medico=0
+    while medico<1:
+        print("quanti medici vuoi?")
+        medico=int(input())
+        eq["medico"]=medico
+    cuoco=0
+    while cuoco<1:
+        print("quanti cuochi vuoi?")
+        cuoco=int(input())
+        eq["cuoco"]=cuoco
+    navigatore=0
+    while navigatore<1:
+        print("quanti navigatori vuoi?")
+        navigatore=int(input())
+        eq["navigatore"]=navigatore
+    return eq
 
 def acquista_provviste_mock():
     return {

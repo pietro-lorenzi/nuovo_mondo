@@ -180,25 +180,34 @@ def venti_favorevoli():
     stampa("Sta andando esattamente come deve andare...", 0.1)
 
 def cattivo_tempo():
-    stampa("Settimana influenzata dal cattivo tempo!")
+    stampa("La nave questa notte è in balia degli elementi.")
+    stampa("Onde e vento non danno pietà.")
     denom = rn.choice([2,3,4,5])
     perdita = merci["medicinale"]["numero"] // denom
     merci["medicinale"]["numero"] -= perdita
-    stampa(f"Sfortunatamente {perdita} bottiglie di medicinale vengono rovesciate per terra!")
+    stampa(f"Un onda più alta delle altre scaraventa per terra {perdita} bottiglie di medicinale.")
+    stampa("Il medico impallidisce.")
+    stampa(f"{perdita}, come le vite che avrebbe potuto salvare.")
 
 def ondata():
-    stampa("Avvistata un'onda anomala!")
+    stampa("In una tranquilla serata, improvvisamente un onda si alza come una montagna vivente.")
     denom = rn.choice([2,3,4,5])
     perdita = merci["armi"]["numero"] // denom
     merci["armi"]["numero"] -= perdita
-    stampa(f"Sfortunatamente {perdita} armi vengono gettate in mare dall'onda!")
+    stampa("La parete d'acqua si abbatte sulla nave.")
+    stampa(f"{perdita} armi vengono scaraventate giù dal ponte.")
+    stampa("L'equipaggio ora è più vulnerabile.")
+    stampa("E il mare lo sa.", 0.08)
 
 def infestazione_ratti():
-    stampa("I marinai ti hanno avvisato di un infestazione di ratti!")
+    stampa("Piccoli occhi rossi risplendono nell'ombra della stiva.")
     denom = rn.choice([2,3,4,5])
     perdita = merci["stoffa"]["numero"] // denom
     merci["stoffa"]["numero"] -= perdita
-    stampa(f"Sfortunatamente {perdita} stoffe vengono rosicchiate dai topi!")
+    stampa(f"Un gruppo di ratti hanno divorato {perdita} rotoli di stoffa.")
+    stampa("E ora vi osservano affamati.")
+    stampa("I ratti hanno fame.")
+    stampa("E la stoffa era l'antipasto.", 0.08)
 
 def avvistamento_alabatro():
     if merci["armi"]["numero"] > 0:

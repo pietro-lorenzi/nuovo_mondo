@@ -15,48 +15,41 @@ def ingaggia_equipaggio_mock():
         "medico": 0,
         "cuoco": 0,
         "navigatore": 0
-    }
-    marinario=0
-    while marinario<1:
-        print("quanti marinai vuoi?")
-        marinario=int(input())
-        eq["marinaio"]=marinario
-    meccanico=0
-    while meccanico<1:
-        print("quanti meccanici vuoi?")
-        meccanico=int(input())
-        eq["meccanico"]=meccanico
-    medico=0
-    while medico<1:
-        print("quanti medici vuoi?")
-        medico=int(input())
-        eq["medico"]=medico
-    cuoco=0
-    while cuoco<1:
-        print("quanti cuochi vuoi?")
-        cuoco=int(input())
-        eq["cuoco"]=cuoco
-    navigatore=0
-    while navigatore<1:
-        print("quanti navigatori vuoi?")
-        navigatore=int(input())
-        eq["navigatore"]=navigatore
+}
+    massimo=False
+    while not massimo:
+        marinaio=0
+        while marinaio<1:
+            print("quanti marinai vuoi?")
+            marinaio=int(input())
+            eq["marinaio"]=marinaio
+        meccanico=0
+        while meccanico<1:
+            print("quanti meccanici vuoi?")
+            meccanico=int(input())
+            eq["meccanico"]=meccanico
+        medico=0
+        while medico<1:
+            print("quanti medici vuoi?")
+            medico=int(input())
+            eq["medico"]=medico
+        cuoco=0
+        while cuoco<1:
+            print("quanti cuochi vuoi?")
+            cuoco=int(input())
+            eq["cuoco"]=cuoco
+        navigatore=0
+        while navigatore<1:
+            print("quanti navigatori vuoi?")
+            navigatore=int(input())
+            eq["navigatore"]=navigatore
+        tot=marinaio+meccanico+medico+cuoco+navigatore
+
+        if tot > 16:
+            print("hai superato il numero massimo di equipaggio")
+        else:
+            massimo=True
     return eq
 
-def acquista_provviste_mock():
-    return {
-        "verdura": 52,
-        "frutta": 104,
-        "carne": 104,
-        "acqua": 52
-    }
+print("ciao")
 
-def acquista_merci_mock():
-    return {
-        "medicinale": 10,
-        "armi": 10,
-        "sale": 10,
-        "stoffa": 10,
-        "coltelli": 10,
-        "diamanti": 10
-    }

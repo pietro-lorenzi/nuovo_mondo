@@ -51,5 +51,58 @@ def ingaggia_equipaggio_mock():
             massimo=True
     return eq
 
-print("ciao")
+def proviste_eq():
+    proviste= {
+        "verdura": 0,
+        "frutta": 0,
+        "carne": 0,
+        "acqua": 0,
+}
+    monete=2000
+    spesa=False
+    while not spesa:
+            verdura=0
+            print("quanta verdura vuoi?")
+            verdura=int(input())
+            proviste["verdura"]=verdura
+            
+            frutta=0
+            print("quanta frutta vuoi?")
+            frutta=int(input())
+            proviste["frutta"]=frutta
+            
+            carne=0
+            print("quanta carne vuoi?")
+            carne=int(input())
+            proviste["carne"]=carne
+            
+            acqua=0
+            print("quanti barili di acqua vuoi?")
+            acqua=int(input())
+            proviste["acqua"]=acqua
+
+            costo_verdura=verdura*0.5
+            monete=monete-costo_verdura
+
+            costo_frutta=frutta*1
+            monete=monete-costo_frutta
+
+            costo_carne=carne*2
+            monete=monete-costo_carne
+
+            costo_acqua=acqua*0.5
+            monete=monete-costo_acqua
+            
+            if monete<0:
+             print("sei andato in bancarotta")
+            else:
+                spesa=True
+    return proviste, monete
+
+
+
+
+
+ingaggia_equipaggio_mock()
+proviste_eq()
 

@@ -211,31 +211,47 @@ def infestazione_ratti():
 
 def avvistamento_alabatro():
     if merci["armi"]["numero"] > 0:
-            stampa("Durante la navigazione avvistate un alabatro!")
-            stampa("Fortunatamente avete delle armi a bordo, ora potete provare a colpirlo per aumentare le scorte di carne!")
-            ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
-            tentativi = min(merci["armi"]["numero"], ciurma)
-            colpito = False
-            for i in range(tentativi):
-                if rn.choice([True, False]):
-                    colpito = True
-            
-            if colpito:
-                carne_guadagnata = rn.randint(10, 15)
-                provviste["carne"]["numero"] += carne_guadagnata
-                stampa(f"Complimenti, siete riusciti a colpire l'alabatro e avete guadagnato {carne_guadagnata} unità di carne!")
-                return True
-            else:
-                stampa("Neanche un colpo è andato a segno, l'alabatro si è allontanato e non avete guadagnato carne.")
-                return False
+        stampa("Un'ombra bianca solca il cielo nuvoloso.")
+        stampa("Uccidere un alabatro si sa, porta sfortuna.")
+        stampa("Ma la fame non conosce superstizioni.", 0.05)
+        ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
+        tentativi = min(merci["armi"]["numero"], ciurma)
+        colpito = False
+        for i in range(tentativi):
+            if rn.choice([True, False]):
+                colpito = True
+        
+        if colpito:
+            carne_guadagnata = rn.randint(10, 15)
+            provviste["carne"]["numero"] += carne_guadagnata
+            stampa("Lo sparo echeggia nell'aria, e il corpo morto del pennuto precipita a prua.")
+            stampa(f"Recuperate {carne_guadagnata} unità di carne.")
+            stampa("Alcuni marinai si fanno il segno della croce.")
+            stampa("Chissà se il mare rivendicherà questa morte.")
+            stampa("Ma almeno stasera non morirete di fame.")
+            return True
+        else:
+            stampa("Innumerevoli spari squarciano l'aria.")
+            stampa("Ma tu hai assunto uomini di mare, non tiratori scelti.")
+            stampa("L'uccello danza tra i proiettili, come a sfidare i tuoi uomini a fare di meglio, per poi allontanarsi, beffardo.")
+            stampa("Alcuni sono sollevati, almeno non verrete bersagliati dalla sfortuna.")
+            stampa("Vero?", 0.1)
+            return False
     else:
-        stampa("Durante la navigazione avvistate un alabatro, ma sfortunatamente non avete armi a bordo per provare a colpirlo")
+        stampa("Un alabatro sorvola la nave.")
+        stampa("Maestoso. Irraggiungibile.")
+        stampa("L'equipaggio lo osserva, affamato e impotente.")
+        stampa("Senza armi, siete solo spettatori.")
+        stampa("Come lui, voi navigate verso l'ignoto.")
+        stampa("Ma a differenza sua, voi potreste non tornare.")
         return False
 
 def avvistamento_scialuppa():
-    stampa("Durante la navigazione avvistate una scialuppa alla deriva!")
-    stampa("A bordo ci sono 4 uomini e una cassa, ma chissà cosa potrebbe mai contenere")
-    stampa("Vuoi salvare i 4 uomini?")
+    stampa("Durante un pomeriggio tranquillo, in lontananza avvistate una scialuppa.")
+    stampa("Il legno è marcio. Sono in mare da molto più di voi.")
+    stampa("A bordo intravedi 4 uomini dalla pancia scavata dalla fame e gli occhi gonfi di paura.")
+    stampa("Uno di loro appoggia la testa su una cassa, chissà cosa contiene.")
+    stampa("Vuoi salvarli?")
     errore = True
     while errore:
         scelta = input(">> ").lower().strip()
@@ -243,26 +259,34 @@ def avvistamento_scialuppa():
             for i in range(4):
                 membro = rn.choice(list(equipaggio.keys()))
                 equipaggio[membro]["numero"] += 1
-            stampa("Decidete di salvare i 4 uomini e li accogliete a bordo, ora avete un equipaggio più numeroso!")
+            stampa("Con riluttanza decidi di calare le scialuppe per farli salire a bordo.")
+            stampa("Non sembrano contenti. Non sembrano grati. Sembrano solo provati dal mare.")
+            stampa("Decidete di aprire la cassa, e all'interno di essa trovate alcune merci utili per il vostro viaggio.")
             for i in merci:
-                merci[i]["numero"] += rn.randint(10,20)
-            stampa("Inoltre, all'interno della cassa trovate delle merci preziose che aumentano le vostre scorte!")
+                caso = rn.randint(10,20)
+                merci[i]["numero"] += caso
+                stampa(f"{i} + {caso}")
             errore = False
         elif scelta == "no":
-            stampa("Decidete di non salvare i 4 uomini e proseguite la navigazione, chissà cosa c'era nella cassa...")
+            stampa("Salvare altre vite non è una vostra priorità e decidete di proseguire oltre.")
+            stampa("Guardando indietro vi sembra quasi che uno degli uomini vi stia fissando sorridendo.")
+            stampa("Non si torna indietro.")
             errore = False
 
 def epidemia():
-    stampa("Durante la navigazione scoppia una terribile epidemia a bordo!")
+    stampa("Improvvisamente un brivido ti percorre il collo. Un presagio.")
+    stampa("Uno dei tuoi uomini tossice improvvisamente. Poi un altro. E un altro ancora.")
+    stampa("L'aria inizia a farsi pesante, irrespirabile.")
     medicine = merci["medicinale"]["numero"]
     ammalati = []
     if medicine > 0:
-        stampa(f"Fortunatamente hai a disposizione {medicine} medicinali, e hai curato altrettanti membri del tuo equipaggio")
+        stampa(f"Dalla stiva riesci a recuperare {medicine} medicine. Chissà se basteranno per tutti.")
         for i in equipaggio:
             ripetizioni = equipaggio[i]["numero"]
             for x in range(ripetizioni):
                 ammalati.append(i)
 
+        stampa("Li osservi uno ad uno. Sudano freddo. Tossiscono secco. Gli occhi sono già quasi spenti. Non c'è tempo di scegliere chi salvare.")
         for i in ammalati:
             if rn.randint(1,10) > 7:
                 ammalati.remove(i)
@@ -279,24 +303,34 @@ def epidemia():
         merci["medicinale"]["numero"] = medicine
     
     if ammalati:
-        stampa(f"Ci sono stati {len(ammalati)} morti, che corrispondono a:")
+        stampa(f"Il medico ci ha provato in tutti i modi, ma {len(ammalati)} morti sono stati inevitabili. Questa epidemia non può essere un caso.")
+        stampa("I morti corrispondono a:")
         for i in ammalati:
             stampa(i.upper())
     else:
-        stampa("Incredibile! Il medico è riuscito a curare tutti!")
+        stampa("Il medico è riuscito a curare tutti, ma sai che il mare non perdonerà queste vite che già sentiva proprie.")
     
-    stampa(f"Restano {medicine} bottiglie di medicinale")
+    stampa(f"Restano {medicine} bottiglie di medicinale. Poche per sentirsi al sicuro.")
 
 def attacco_pirata():
-    stampa("Durante la navigazione siete stati attaccati dai pirati!")
+    stampa("In lontananza la vedete. La bandiera nera con teschio bianco, che sventola fiera nel cielo azzurro.")
+    stampa("Morire qua renderebbe tutto inutile.")
     numero_pirati = rn.randint(3,10)
     ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
     numero_difensori = min(ciurma, merci["armi"]["numero"])
     uomini_persi = min(numero_pirati-numero_difensori, ciurma)
     if uomini_persi <= 0:
-        stampa(f"I pirati erano ben {numero_pirati}, ma grazie a un equipaggio corposo e a un buon numero di armi siete riusciti a difendervi!")
+        stampa(f"{numero_pirati} pirati si abbattono sulla nave.")
+        stampa("Il ponte si tinge di rosso.")
+        stampa("Ma non è il vostro sangue.")
+        stampa("Questa volta.")
+        stampa("I cadaveri dei pirati scivolano in mare.")
+        stampa("L'oceano accoglie tutti, prima o poi.")
     else:
-        stampa(f"Sfortunatamente siete stati colti impreparati, avete perso {uomini_persi} membri!")
+        stampa("E chi avrebbe mai pensato che nel momento dell'ingaggio sarebbero potuti servire anche guerrieri?")
+        stampa("Il sangue si sparge. I corpi cadono. Difficile distinguere se sono tuoi compagni o nemici.")
+        stampa(f"{uomini_persi} dei tuoi uomini hanno già visto la loro ultima alba, senza saperlo.")
+        stampa("I loro corpi vengono gettati in mare. Senza preghiere o cerimonie. Senza dignità.")
         stampa("I morti sono:")
         for i in range(uomini_persi):
             acc = ciurma_accettabile(equipaggio)
@@ -305,16 +339,20 @@ def attacco_pirata():
             stampa(morto)
 
 def danni_al_timone():
-    stampa("Durante la navigazione si sono verificati dei danni al timone!")
+    stampa("Improvvisamente un pezzo di legno del timone ti si conficca nella mano.")
+    stampa("Inizialmente pensi sia una scheggia. Solo dopo ti accorgi che il timone cade a pezzi.")
+    stampa("Il viaggio è a rischio. E lo sai.")
     if equipaggio["meccanico"]["numero"] > 0:
         viaggio["settimane totali"] += 1
-        stampa("Fortunatamente nel tuo equipaggio è presente un meccanico, che riesce a riparare in fretta.")
-        stampa("Il viaggio si allunga di una sola settimana")
+        stampa("Nel tuo equipaggio è presente un meccanico, che riesce a riparare il danno senza troppi problemi.")
+        stampa("Tuttavia l'incidente non è superificiale, e il viaggio si allunga di una settimana.")
     else:
         aumento = rn.randint(2,4)
         viaggio["settimane totali"] += aumento
-        stampa("Nel tuo equipaggio non è presente neanche un meccanico, è quindi compito del resto della ciurma aggiustare il timone alla bell'e meglio")
-        stampa(f"Il viaggio si allunga di {aumento} settimane")
+        stampa("Nessuno dei tuoi uomini è un meccanico, e nessuno è in grado di riparare il timone a dovere.")
+        stampa("Tentativi maldestri. Riparazioni improvvisate.")
+        stampa(f"Il viaggio si allunga di {aumento} settimane.")
+        stampa("E nel mentre le provviste diminuiscono.")
 
 def raffiche_di_vento():
     stampa("Durante la navigazione si sono verificate delle forti raffiche di vento!")
@@ -378,11 +416,12 @@ def rimuovi_scorte():
         provviste[i]["numero"] -= provviste[i]["consumo"]*ciurma
 
 def calcolo_scorte_viaggio():
+    morale = 0
     ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
     for i in provviste:
         if provviste[i]["numero"] <= 0:
             stampa(f"Hai esaurito le razioni di {i}, la tua ciurma non ne sarà felice...")
-            #TODO morale
+            morale -= 10
         
         if provviste[i]["numero"] < provviste[i]["consumo"]*ciurma:
             stampa(f"Le scorte attuali di {i} non sono sufficienti a coprire tutta la durata del viaggio.")
@@ -392,7 +431,7 @@ def calcolo_scorte_viaggio():
                 scelta = input(">> ").strip().lower()
                 if scelta in ["si", "s", "y"]:
                     provviste[i]["consumo"] /= 2
-                    #TODO Gestione morale (-5 punti a settimana)
+                    morale -= 5
                     errore = False
                 elif scelta in ["no", "n"]:
                     errore = False
@@ -406,15 +445,18 @@ def calcolo_scorte_viaggio():
                 scelta = input(">> ").strip().lower()
                 if scelta in ["si", "s", "y"]:
                     provviste[i]["consumo"] *= 2
-                    #TODO Gestione morale (+5 punti a settimana)
+                    morale += 5
                     errore = False
                 elif scelta in ["no", "n"]:
                     errore = False
                 else:
                     stampa("Scelta non accettabile")
 
+    return morale
+
 
 # --------------- MORALE ---------------
 
 def aggiornamento_morale():
-    pass
+    morale = calcolo_scorte_viaggio()
+    viaggio["morale"] += morale

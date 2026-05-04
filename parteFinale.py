@@ -1,4 +1,6 @@
 import json
+from random import choice, randint
+from  core import avvistamento_alabatro
 
 #la nave si avvicina alle coste 
 
@@ -325,7 +327,7 @@ Valore degli oggetti (che possiedi):
                             except:
                                 print("Devi inserire un'opzione o una quantità valida!")
 
-        print(f"""
+    print(f"""
 Oggetti che possiedi,  dopo lo scambio:
 - Sale --> {merci["sale"]["numero"]};
 - Stoffa --> {merci["stoffa"]["numero"]};
@@ -340,3 +342,63 @@ Oggetti che possiedi,  dopo lo scambio:
         return merci 
 
     return merci
+
+
+
+#Tradimento
+def Tradimento(merci,  equipaggio, albatro_ucciso = avvistamento_alabatro()):
+    if merci["armi"]["numero"] > 0:
+        errore = True
+        print(f"""Duranta la notte un traditore, con intenzioni sospette, si avvicina alla tenda, dove stai  alloggiando, proponendoti uno scambio il quale prevede lo scambio di 30 perle per ogni arma posseduta:
+-perle in possesso --> {merci["perle"]["numero"]};
+-numero armi in  possesso --> {merci["armi"]["numero"]};
+-numero di perle in caso di scambio --> {(merci["armi"]["numero"]*30)+merci["perle"]["numero"]}.""")
+        while errore:
+            try:
+                AccettaOfferta = input("Vuoi accettare l'offerta del traditore? (s/n)>> ")
+
+                match AccettaOfferta:
+                    case "s":
+                        #caricamento merci scambiate sulla nave
+                        merci["perle"]["numero"] += merci["armi"]["numero"]*30
+                        merci["armi"]["numero"] = 0
+
+                        #gestione probabilità di fuga
+                        if albatro_ucciso:
+                            gameOver_now = True
+                        elif not albatro_ucciso:
+                            gameOver_now = False
+                        else:
+                            gameOver_now = choice([True, False])
+
+                        if gameOver_now:
+                            print("Il capo tribù è venuto a conoscenza dello scambio che hai effettuato con il traditore e ha ucciso l'intero equipaggio.")
+                            for membro in equipaggio.keys():
+                                equipaggio[membro]["numero"] = 0
+
+                            errore = False
+                            return equipaggio, merci #Qui PD ho azzerato tutti i personaggi dell'equipaggio, perché non so come chiudere il gioco, poi vedi tu, perché qui è GAME OVER
+                        else:
+                            print("Il capo tribù non è venuto a conoscenza dello scambio che hai effettuato con il traditore, quindi la ciurma è salva.")
+                            errore = False
+                            return equipaggio, merci
+                    case "n":
+                        if albatro_ucciso:
+                            numPerleOfferte = randint(5, 20)
+                        else:
+                            numPerleOfferte = randint(30, 50)
+                        print(f"Il capo tribù è venuto a conoscenza dello scambio che non hai effettuato con il traditore e ti ha offerto {numPerleOfferte} perle.")
+                        merci["perle"]["numero"] += numPerleOfferte
+                        errore = False
+                        return equipaggio, merci
+                    case _:
+                        print("Devi inserire una delle 2 opzioni precedenti!")
+            except:
+                print("Devi inserire una delle 2 opzioni precedenti!")
+    else:
+        return equipaggio, merci
+    
+
+#Epilogo
+def Epilogo():
+    pass

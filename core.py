@@ -33,22 +33,26 @@ provviste = {
     "verdura":{
         "costo": 0.5,     #monete al kilo
         "consumo": 0.5,   #comsumo settimanale per membro
-        "numero": 0       #quanta ne abbiamo
+        "numero": 0,      #quanta ne abbiamo
+        "stato": 1        # 1 = normale, 0.5 = dimezzata, 2 = raddoppiata
     },
     "frutta":{
         "costo": 1,   
         "consumo": 1, 
-        "numero": 0   
+        "numero": 0,
+        "stato": 1
     },
     "carne":{
         "costo": 2,   
         "consumo": 1, 
-        "numero": 0   
+        "numero": 0,
+        "stato": 1
     },
     "acqua":{
         "costo": 0.5,   
         "consumo": 0.5, 
-        "numero": 0   
+        "numero": 0,
+        "stato": 1   
     }
 }
 
@@ -82,17 +86,17 @@ merci = {
 viaggio = {
     "settimana attuale": 0,
     "settimane totali": 8,
-    "morale": 100
+    "morale": 100,
+    "delta_morale": 0
 }
 
 # ---------- FUNZIONI CALCOLO ----------
 
-def calcola_costo_equipaggio(): #TODO sistemare
+def calcola_costo_equipaggio():
     costo_totale = 0
     for ruolo in equipaggio:
-        costo_totale += equipaggio[ruolo]["numero"] * equipaggio[ruolo]["costo"]
+        costo_totale += equipaggio[ruolo]["numero"] * equipaggio[ruolo]["costo"] * viaggio["settimane totali"]
     return costo_totale
-
 
 # --------------- EVENTI ---------------
 
@@ -214,7 +218,7 @@ def avvistamento_alabatro():
         stampa("Un'ombra bianca solca il cielo nuvoloso.")
         stampa("Uccidere un alabatro si sa, porta sfortuna.")
         stampa("Ma la fame non conosce superstizioni.", 0.05)
-        ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
+        ciurma = calcola_ciurma(equipaggio)
         tentativi = min(merci["armi"]["numero"], ciurma)
         colpito = False
         for i in range(tentativi):
@@ -316,7 +320,7 @@ def attacco_pirata():
     stampa("In lontananza la vedete. La bandiera nera con teschio bianco, che sventola fiera nel cielo azzurro.")
     stampa("Morire qua renderebbe tutto inutile.")
     numero_pirati = rn.randint(3,10)
-    ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
+    ciurma = calcola_ciurma(equipaggio)
     numero_difensori = min(ciurma, merci["armi"]["numero"])
     uomini_persi = min(numero_pirati-numero_difensori, ciurma)
     if uomini_persi <= 0:
@@ -411,27 +415,27 @@ def nessun_imprevisto():
 # ---------- CONTROLLO SCORTE ----------
 
 def rimuovi_scorte():
-    ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
+    ciurma = calcola_ciurma(equipaggio)
     for i in provviste:
-        provviste[i]["numero"] -= provviste[i]["consumo"]*ciurma
+        provviste[i]["numero"] -= provviste[i]["consumo"]*provviste[i]["stato"]*ciurma
 
 def calcolo_scorte_viaggio():
-    morale = 0
-    ciurma = equipaggio["marinaio"]["numero"] + equipaggio["meccanico"]["numero"] + equipaggio["medico"]["numero"] + equipaggio["navigatore"]["numero"] + equipaggio["cuoco"]["numero"]
+    ciurma = calcola_ciurma(equipaggio)
     for i in provviste:
         if provviste[i]["numero"] <= 0:
             stampa(f"Hai esaurito le razioni di {i}, la tua ciurma non ne sarà felice...")
-            morale -= 10
+            viaggio["delta_morale"] -= 10
         
-        if provviste[i]["numero"] < provviste[i]["consumo"]*ciurma:
+        elif provviste[i]["numero"] < provviste[i]["consumo"]*ciurma:
             stampa(f"Le scorte attuali di {i} non sono sufficienti a coprire tutta la durata del viaggio.")
             stampa(f"Intendi dimezzarle?")
             errore = True
             while errore:
                 scelta = input(">> ").strip().lower()
                 if scelta in ["si", "s", "y"]:
-                    provviste[i]["consumo"] /= 2
-                    morale -= 5
+                    if provviste[i]["stato"] != 0.5:
+                        viaggio["delta_morale"] -= 5
+                    provviste[i]["stato"] = 0.5
                     errore = False
                 elif scelta in ["no", "n"]:
                     errore = False
@@ -444,19 +448,27 @@ def calcolo_scorte_viaggio():
             while errore:
                 scelta = input(">> ").strip().lower()
                 if scelta in ["si", "s", "y"]:
-                    provviste[i]["consumo"] *= 2
-                    morale += 5
+                    if provviste[i]["stato"] != 2:
+                        viaggio["delta_morale"] += 5
+                    provviste[i]["stato"] = 2
                     errore = False
                 elif scelta in ["no", "n"]:
                     errore = False
                 else:
                     stampa("Scelta non accettabile")
 
-    return morale
-
-
 # --------------- MORALE ---------------
 
 def aggiornamento_morale():
     morale = calcolo_scorte_viaggio()
-    viaggio["morale"] += morale
+    viaggio["morale"] += viaggio["delta_morale"]
+
+# ------------ AMMUTINAMENTO -----------
+
+def ammutinamento():
+    pass
+
+# ------------- RICALCOLO -------------
+
+def ricalcolo():
+    pass

@@ -16,3 +16,7 @@ def ciurma_accettabile(diz): #funzione per definire quali membri della ciurma so
         if diz[i]["numero"] > 0:
             acc.append(i)
     return acc
+
+def calcola_ciurma(diz):
+    ciurma = diz["marinaio"]["numero"] + diz["meccanico"]["numero"] + diz["medico"]["numero"] + diz["navigatore"]["numero"] + diz["cuoco"]["numero"]
+    return ciurma

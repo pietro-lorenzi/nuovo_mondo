@@ -55,25 +55,25 @@ from parteIniziale import *
 from time import sleep
 
 def ingaggio_completato():
-    equipaggio["marinaio"]["numero"] = ingaggia_equipaggio_mock()["marinaio"]
-    equipaggio["cuoco"]["numero"] = ingaggia_equipaggio_mock()["cuoco"]
-    equipaggio["meccanico"]["numero"] = ingaggia_equipaggio_mock()["meccanico"]
-    equipaggio["medico"]["numero"] = ingaggia_equipaggio_mock()["medico"]
-    equipaggio["navigatore"]["numero"] = ingaggia_equipaggio_mock()["navigatore"]
+    equipaggio["marinaio"]["numero"] = ingaggia_eq()["marinaio"]
+    equipaggio["cuoco"]["numero"] = ingaggia_eq()["cuoco"]
+    equipaggio["meccanico"]["numero"] = ingaggia_eq()["meccanico"]
+    equipaggio["medico"]["numero"] = ingaggia_eq()["medico"]
+    equipaggio["navigatore"]["numero"] = ingaggia_eq()["navigatore"]
 
 def provviste_completate():
-    provviste["verdura"]["numero"] = acquista_provviste_mock()["verdura"]
-    provviste["frutta"]["numero"] = acquista_provviste_mock()["frutta"]
-    provviste["carne"]["numero"] = acquista_provviste_mock()["carne"]
-    provviste["acqua"]["numero"] = acquista_provviste_mock()["acqua"]
+    provviste["verdura"]["numero"] = provviste_eq()["verdura"]
+    provviste["frutta"]["numero"] = provviste_eq()["frutta"]
+    provviste["carne"]["numero"] = provviste_eq()["carne"]
+    provviste["acqua"]["numero"] = provviste_eq()["acqua"]
 
 def merci_completate():
-    merci["medicinale"]["numero"] = acquista_merci_mock()["medicinale"]
-    merci["armi"]["numero"] = acquista_merci_mock()["armi"]
-    merci["sale"]["numero"] = acquista_merci_mock()["sale"]
-    merci["stoffa"]["numero"] = acquista_merci_mock()["stoffa"]
-    merci["coltelli"]["numero"] = acquista_merci_mock()["coltelli"]
-    merci["diamanti"]["numero"] = acquista_merci_mock()["diamanti"]
+    merci["medicinale"]["numero"] = merci_eq()["medicinale"]
+    merci["armi"]["numero"] = merci_eq()["armi"]
+    merci["sale"]["numero"] = merci_eq()["sale"]
+    merci["stoffa"]["numero"] = merci_eq()["stoffa"]
+    merci["coltelli"]["numero"] = merci_eq()["coltelli"]
+    merci["diamanti"]["numero"] = merci_eq()["diamanti"]
 
 ingaggio_completato()
 provviste_completate()

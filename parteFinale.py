@@ -346,7 +346,7 @@ Oggetti che possiedi,  dopo lo scambio:
 
 
 #Tradimento
-def Tradimento(merci,  equipaggio, albatro_ucciso = avvistamento_alabatro()):
+def Tradimento(merci,  equipaggio, albatro_ucciso):
     if merci["armi"]["numero"] > 0:
         errore = True
         print(f"""Duranta la notte un traditore, con intenzioni sospette, si avvicina alla tenda, dove stai  alloggiando, proponendoti uno scambio il quale prevede lo scambio di 30 perle per ogni arma posseduta:

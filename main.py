@@ -49,33 +49,51 @@ FILE
 🌈 Have fun 🌈
 """
 
+#TODO sys clear terminal
+
 from altreFunzioni import *
 from core import *
 from parteIniziale import *
-from time import sleep
+from parteFinale import *
 
 def ingaggio_completato():
-    equipaggio["marinaio"]["numero"] = ingaggia_eq()["marinaio"]
-    equipaggio["cuoco"]["numero"] = ingaggia_eq()["cuoco"]
-    equipaggio["meccanico"]["numero"] = ingaggia_eq()["meccanico"]
-    equipaggio["medico"]["numero"] = ingaggia_eq()["medico"]
-    equipaggio["navigatore"]["numero"] = ingaggia_eq()["navigatore"]
+    diz = ingaggia_eq()
+    equipaggio["marinaio"]["numero"] = diz["marinaio"]
+    equipaggio["cuoco"]["numero"] = diz["cuoco"]
+    equipaggio["meccanico"]["numero"] = diz["meccanico"]
+    equipaggio["medico"]["numero"] = diz["medico"]
+    equipaggio["navigatore"]["numero"] = diz["navigatore"]
 
 def provviste_completate():
-    provviste["verdura"]["numero"] = provviste_eq()["verdura"]
-    provviste["frutta"]["numero"] = provviste_eq()["frutta"]
-    provviste["carne"]["numero"] = provviste_eq()["carne"]
-    provviste["acqua"]["numero"] = provviste_eq()["acqua"]
+    diz = provviste_eq()
+    provviste["verdura"]["numero"] = diz["verdura"]
+    provviste["frutta"]["numero"] = diz["frutta"]
+    provviste["carne"]["numero"] = diz["carne"]
+    provviste["acqua"]["numero"] = diz["acqua"]
 
 def merci_completate():
-    merci["medicinale"]["numero"] = merci_eq()["medicinale"]
-    merci["armi"]["numero"] = merci_eq()["armi"]
-    merci["sale"]["numero"] = merci_eq()["sale"]
-    merci["stoffa"]["numero"] = merci_eq()["stoffa"]
-    merci["coltelli"]["numero"] = merci_eq()["coltelli"]
-    merci["diamanti"]["numero"] = merci_eq()["diamanti"]
+    diz = merci_eq()
+    merci["medicinale"]["numero"] = diz["medicinale"]
+    merci["armi"]["numero"] = diz["armi"]
+    merci["sale"]["numero"] = diz["sale"]
+    merci["stoffa"]["numero"] = diz["stoffa"]
+    merci["coltelli"]["numero"] = diz["coltelli"]
+    merci["diamanti"]["numero"] = diz["diamanti"]
 
 ingaggio_completato()
 provviste_completate()
 merci_completate()
 costo_equipaggio = calcola_costo_equipaggio()
+
+alabatro_risparmiato = False
+pool_eventi = [
+    uomo_in_mare, verdura_in_mare, frutta_in_mare, carne_in_mare, acqua_in_mare, pesca_miracolosa, 
+    tempesta_miracolosa, venti_favorevoli, cattivo_tempo, ondata, infestazione_ratti, 
+    avvistamento_alabatro, avvistamento_scialuppa, epidemia, attacco_pirata, danni_al_timone, 
+    raffiche_di_vento, lambda: avvistamento_isola(alabatro_risparmiato), nessun_imprevisto
+    ]
+
+print(equipaggio, provviste, merci)
+
+while viaggio["settimana attuale"] <= viaggio["settimane totali"]:
+    pass

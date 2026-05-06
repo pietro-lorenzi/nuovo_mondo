@@ -93,7 +93,8 @@ viaggio = {
     "settimana attuale": 0,
     "settimane totali": 8,
     "delta_morale": 0,
-    "scorta dimezzata": False
+    "scorta dimezzata": False,
+    "conta alabatro": 0
 }
 
 # ---------- FUNZIONI CALCOLO ----------
@@ -405,12 +406,12 @@ def avvistamento_isola(alabatro):
                     stampa("Gli siete sembrati simpatici e hanno deciso di regalarvi le seguenti risorse:")
                     if alabatro:
                         for i in ["medicinale", "armi", "sale", "stoffa", "diamanti", "coltelli"]:
-                            x = rn.randint(5,20)
+                            x = rn.randint(20,40)
                             merci[i]["numero"] += x
                             stampa(f"{i} - {x} unità")
                     else:
                         for i in ["medicinale", "armi", "sale", "stoffa", "diamanti", "coltelli"]:
-                            x = rn.randint(20,40)
+                            x = rn.randint(5,20)
                             merci[i]["numero"] += x
                             stampa(f"{i} - {x} unità")
             else:
@@ -481,11 +482,10 @@ def aggiornamento_morale():
             equipaggio[ruolo]["morale"][i] += viaggio["delta_morale"]
     
     for ruolo in equipaggio:
-        for i in range(equipaggio[ruolo]["numero"]):
+        for i in range(equipaggio[ruolo]["numero"][:]):
             if equipaggio[ruolo]["morale"][i] <= 0:
                 equipaggio[ruolo]["numero"] -= 1
-                morale = rn.choice(equipaggio[ruolo]["morale"])
-                equipaggio[ruolo]["morale"].remove(morale)
+                equipaggio[ruolo]["morale"].remove(0)
 
 def aggiunta_morale():
     for ruolo in equipaggio:

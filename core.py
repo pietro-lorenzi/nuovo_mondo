@@ -3,30 +3,36 @@ import random as rn
 from time import sleep
 
 #TODO termcolor
+#TODO flag alabatro
 
 # ---------- STRUTTURE DATI ----------
 
 equipaggio = {
     "marinaio": {
         "numero": 0, #con numero intendo quanti individui di quel mestiere abbiamo
-        "costo": 10
+        "costo": 10,
+        "morale": []
     },
     "meccanico": {
         "numero": 0,
-        "costo": 15
+        "costo": 15,
+        "morale": []
     },
     "medico": {
         "numero": 0,
-        "costo": 25
+        "costo": 25,
+        "morale": []
     },
     "navigatore": {
         "numero": 0,
-        "costo": 20
+        "costo": 20,
+        "morale": []
     },
     "cuoco": {
         "numero": 0,
-        "costo": 15
-    }
+        "costo": 15,
+        "morale": []
+    },
 }
 
 provviste = {
@@ -86,8 +92,8 @@ merci = {
 viaggio = {
     "settimana attuale": 0,
     "settimane totali": 8,
-    "morale": 100,
-    "delta_morale": 0
+    "delta_morale": 0,
+    "scorta dimezzata": False
 }
 
 # ---------- FUNZIONI CALCOLO ----------
@@ -103,6 +109,9 @@ def calcola_costo_equipaggio():
 def uomo_in_mare():
     acc = ciurma_accettabile(equipaggio)
     morto = rn.choice(acc)
+    equipaggio[morto]["numero"] -= 1
+    morale = rn.choice(equipaggio[morto]["morale"])
+    equipaggio[morto]["morale"].remove(morale)
     stampa("Lentamente, dall'orizzonte, un navigatore scorge un onda anomala.")
     stampa("Prima che chiunque possa reagire, l'onda si abbatte violentemente sulla nave.", 0.05)
     stampa(f"Un {morto} cade tra le fauci dell'oceano.")
@@ -177,7 +186,9 @@ def venti_favorevoli():
     stampa("In una fredda mattina ti accorgi che dei venti favorevoli stanno spingendo la nave più velocemente.")
     stampa("L'equipaggio ne è felice, festeggia perché arriverai prima a destinazione.")
     viaggio["settimane totali"] -= 1
-    viaggio["morale"] += rn.randint(5,15)
+    for ruolo in equipaggio:
+        for i in range(equipaggio[ruolo]["numero"]):
+            equipaggio[ruolo]["morale"][i] += rn.randint(5,15)
     stampa("Eppure vedi un uomo, seduto rannicchiato cupo in un angolo della cabina.")
     stampa("Gli domandi cosa c'è che non va, e perché non è a festeggiare con gli altri.")
     stampa("E lui ti risponde: ", capo=False)
@@ -263,6 +274,8 @@ def avvistamento_scialuppa():
             for i in range(4):
                 membro = rn.choice(list(equipaggio.keys()))
                 equipaggio[membro]["numero"] += 1
+                morale = rn.randint(25,75)
+                equipaggio[membro]["morale"].append(morale)
             stampa("Con riluttanza decidi di calare le scialuppe per farli salire a bordo.")
             stampa("Non sembrano contenti. Non sembrano grati. Sembrano solo provati dal mare.")
             stampa("Decidete di aprire la cassa, e all'interno di essa trovate alcune merci utili per il vostro viaggio.")
@@ -284,14 +297,13 @@ def epidemia():
     medicine = merci["medicinale"]["numero"]
     ammalati = []
     if medicine > 0:
-        stampa(f"Dalla stiva riesci a recuperare {medicine} medicine. Chissà se basteranno per tutti.")
+        stampa(f"Dalla stiva riesci a recuperare {medicine} medicine. Chissà se basteranno per tutti...")
         for i in equipaggio:
-            ripetizioni = equipaggio[i]["numero"]
-            for x in range(ripetizioni):
+            for x in range(equipaggio[i]["numero"]):
                 ammalati.append(i)
 
         stampa("Li osservi uno ad uno. Sudano freddo. Tossiscono secco. Gli occhi sono già quasi spenti. Non c'è tempo di scegliere chi salvare.")
-        for i in ammalati:
+        for i in ammalati[:]:
             if rn.randint(1,10) > 7:
                 ammalati.remove(i)
 
@@ -303,6 +315,8 @@ def epidemia():
 
         for i in ammalati:
             equipaggio[i]["numero"] -= 1
+            morale = rn.choice(equipaggio[i]["morale"])
+            equipaggio[i]["morale"].remove(morale)
 
         merci["medicinale"]["numero"] = medicine
     
@@ -340,6 +354,8 @@ def attacco_pirata():
             acc = ciurma_accettabile(equipaggio)
             morto = rn.choice(acc)
             equipaggio[morto]["numero"] -= 1
+            morale = rn.choice(equipaggio[morto]["morale"])
+            equipaggio[morto]["morale"].remove(morale)
             stampa(morto)
 
 def danni_al_timone():
@@ -399,13 +415,11 @@ def avvistamento_isola(alabatro):
                             stampa(f"{i} - {x} unità")
             else:
                 stampa("L'isola non era abitata, l'esplorazione si è rivelata vana.")
-            errore = False
-            return True
+            viaggio["settimane totali"] += 2
         elif scelta in ["no", "n"]:
             stampa("Hai deciso di non esplorare l'isola.")
             stampa("Non ti piace perdere tempo, ma chissà cosa avresti potuto trovarci...")
             errore = False
-            return False
 
 def nessun_imprevisto():
     stampa("Durante questa settimana di navigazione non si è verificato nessun imprevisto.")
@@ -421,6 +435,7 @@ def rimuovi_scorte():
 
 def calcolo_scorte_viaggio():
     ciurma = calcola_ciurma(equipaggio)
+    viaggio["scorta dimezzata"] = False
     for i in provviste:
         if provviste[i]["numero"] <= 0:
             stampa(f"Hai esaurito le razioni di {i}, la tua ciurma non ne sarà felice...")
@@ -436,6 +451,7 @@ def calcolo_scorte_viaggio():
                     if provviste[i]["stato"] != 0.5:
                         viaggio["delta_morale"] -= 5
                     provviste[i]["stato"] = 0.5
+                    viaggio["scorta dimezzata"] = True
                     errore = False
                 elif scelta in ["no", "n"]:
                     errore = False
@@ -460,15 +476,62 @@ def calcolo_scorte_viaggio():
 # --------------- MORALE ---------------
 
 def aggiornamento_morale():
-    morale = calcolo_scorte_viaggio()
-    viaggio["morale"] += viaggio["delta_morale"]
+    for ruolo in equipaggio:
+        for i in range(equipaggio[ruolo]["numero"]):
+            equipaggio[ruolo]["morale"][i] += viaggio["delta_morale"]
+    
+    for ruolo in equipaggio:
+        for i in range(equipaggio[ruolo]["numero"]):
+            if equipaggio[ruolo]["morale"][i] <= 0:
+                equipaggio[ruolo]["numero"] -= 1
+                morale = rn.choice(equipaggio[ruolo]["morale"])
+                equipaggio[ruolo]["morale"].remove(morale)
+
+def aggiunta_morale():
+    for ruolo in equipaggio:
+        for membro in range(equipaggio[ruolo]["numero"]):
+            equipaggio[ruolo]["morale"].append(100)
 
 # ------------ AMMUTINAMENTO -----------
 
-def ammutinamento():
-    pass
+def punti_ammutinamento(alabatro): #TODO spiegare perché si rischia l'ammutinamento
+    punti = 0
+    if viaggio["scorta dimezzata"]:
+        punti += 30
+    if equipaggio["cuoco"]["numero"] == 0:
+        punti += 30
+    if alabatro == True:
+        punti += 30
+    if alabatro == False:
+        punti -= 20
+    if calcola_ciurma(equipaggio) > 12:
+        punti += 30
+    if viaggio["settimana attuale"] > 8:
+        x = viaggio["settimana attuale"] - 8
+        punti += 10*x
+    elif viaggio["settimane totali"] < 8:
+        x = 8 - viaggio["settimane totali"]
+        punti -= 10*x
+
+    return punti
+
+def ammutinamento(punti): #TODO sistemare narratore
+    if punti > 1 and punti < 99:
+        stampa("Rischi ammutinamento")
+    elif punti > 100:
+        stampa("La tua ciurma si ammutina")
+        #TODO game over
 
 # ------------- RICALCOLO -------------
 
 def ricalcolo():
-    pass
+    scontenti = 0
+    mezza_ciurma = calcola_ciurma(equipaggio) / 2
+    for ruolo in equipaggio:
+        for i in equipaggio[ruolo]["morale"]:
+            if i < 30:
+                scontenti += 1
+
+    if scontenti > mezza_ciurma:
+        viaggio["settimane totali"] += 1
+        #TODO spiegare perché

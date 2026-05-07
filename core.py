@@ -87,6 +87,18 @@ merci = {
         "prezzo": 1,
         "numero": 0
     },
+    "perle":{
+        "prezzo": 2,
+        "numero": 0
+    },
+    "manufatti":{
+        "prezzo": 2,
+        "numero": 0
+    },
+    "spezie":{
+        "prezzo": 1,
+        "numero": 0
+    },
 }
 
 viaggio = {

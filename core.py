@@ -37,28 +37,24 @@ equipaggio = {
 
 provviste = {
     "verdura":{
-        "costo": 0.5,     #monete al kilo
-        "consumo": 0.5,   #comsumo settimanale per membro
-        "numero": 0,      #quanta ne abbiamo
-        "stato": 1        # 1 = normale, 0.5 = dimezzata, 2 = raddoppiata
+        "costo": 0.5,     
+        "consumo": 0.5,
+        "numero": 0,      
     },
     "frutta":{
         "costo": 1,   
         "consumo": 1, 
         "numero": 0,
-        "stato": 1
     },
     "carne":{
         "costo": 2,   
         "consumo": 1, 
         "numero": 0,
-        "stato": 1
     },
     "acqua":{
         "costo": 0.5,   
         "consumo": 0.5, 
-        "numero": 0,
-        "stato": 1   
+        "numero": 0, 
     }
 }
 
@@ -102,14 +98,15 @@ merci = {
 }
 
 viaggio = {
-    "settimana attuale": 0,
+    "settimana attuale": 1,
     "settimane totali": 8,
     "delta_morale": 0,
     "scorta dimezzata": False,
-    "conta alabatro": 0
+    "conta alabatro": 0,
+    "eventi accaduti": []
 }
 
-# ---------- FUNZIONI CALCOLO ----------
+# ---------- CALCOLO COSTO ----------
 
 def calcola_costo_equipaggio():
     costo_totale = 0
@@ -444,7 +441,7 @@ def nessun_imprevisto():
 def rimuovi_scorte():
     ciurma = calcola_ciurma(equipaggio)
     for i in provviste:
-        provviste[i]["numero"] -= provviste[i]["consumo"]*provviste[i]["stato"]*ciurma
+        provviste[i]["numero"] -= provviste[i]["consumo"]*ciurma
 
 def calcolo_scorte_viaggio():
     ciurma = calcola_ciurma(equipaggio)
@@ -454,16 +451,14 @@ def calcolo_scorte_viaggio():
             stampa(f"Hai esaurito le razioni di {i}, la tua ciurma non ne sarà felice...")
             viaggio["delta_morale"] -= 10
         
-        elif provviste[i]["numero"] < provviste[i]["consumo"]*ciurma:
-            stampa(f"Le scorte attuali di {i} non sono sufficienti a coprire tutta la durata del viaggio.")
+        elif provviste[i]["numero"] < provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"]):
+            stampa(f"Per completare il viaggio avresti bisogno di {provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"])} unità di {i}, ma tu ne possiedi solo {provviste[i]["numero"]}")
             stampa(f"Intendi dimezzarle?")
             errore = True
             while errore:
                 scelta = input(">> ").strip().lower()
                 if scelta in ["si", "s", "y"]:
-                    if provviste[i]["stato"] != 0.5:
-                        viaggio["delta_morale"] -= 5
-                    provviste[i]["stato"] = 0.5
+                    provviste[i]["consumo"] /= 2
                     viaggio["scorta dimezzata"] = True
                     errore = False
                 elif scelta in ["no", "n"]:
@@ -471,15 +466,14 @@ def calcolo_scorte_viaggio():
                 else:
                     stampa("Scelta non accettabile")
         
-        elif provviste[i]["numero"] > provviste[i]["consumo"]*ciurma*2:
-            stampa(f"Le scorte attuali di {i} sono abbondanti, intendi raddoppiare le razioni?")
+        elif provviste[i]["numero"] > provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"]):
+            stampa(f"Per completare il viaggio avresti bisogno di {provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"])} unità di {i}, mentre tu ne hai {provviste[i]["numero"]} unità")
+            stampa("Intendi raddoppiare le razioni?")
             errore = True
             while errore:
                 scelta = input(">> ").strip().lower()
                 if scelta in ["si", "s", "y"]:
-                    if provviste[i]["stato"] != 2:
-                        viaggio["delta_morale"] += 5
-                    provviste[i]["stato"] = 2
+                    provviste[i]["consumo"] *= 2
                     errore = False
                 elif scelta in ["no", "n"]:
                     errore = False
@@ -498,11 +492,29 @@ def aggiornamento_morale():
             if equipaggio[ruolo]["morale"][i] <= 0:
                 equipaggio[ruolo]["numero"] -= 1
                 equipaggio[ruolo]["morale"].remove(0)
+                stampa(f"La fame, la stanchezza, la paura. Un {ruolo} ha deciso che erano abbastanza.")
+                stampa(f"Un {ruolo} è morto suicida.")
 
 def aggiunta_morale():
     for ruolo in equipaggio:
         for membro in range(equipaggio[ruolo]["numero"]):
             equipaggio[ruolo]["morale"].append(100)
+
+# -------------- RIEPILOGO -------------
+
+def riepilogo():
+    stampa("La ciurma ancora in vita è composta da:")
+    for ruolo in equipaggio:
+        for i in range(equipaggio[ruolo]["numero"]):
+            stampa(f"{i} - {ruolo} - {equipaggio[ruolo]["morale"][i]}", 0.02)
+
+    stampa("Le scorte di cibo residue sono composte da:")
+    for scorta in provviste:
+        stampa(f"{scorta} - {provviste[scorta]["numero"]} unità", 0.02)
+
+    stampa("Le merci di scambio rimanenti sono:")
+    for merce in merci:
+        stampa(f"{merce} - {merci[merce]["numero"]} unità", 0.02)
 
 # ------------ AMMUTINAMENTO -----------
 
@@ -527,14 +539,34 @@ def punti_ammutinamento(alabatro): #TODO spiegare perché si rischia l'ammutinam
 
     return punti
 
-def ammutinamento(punti): #TODO sistemare narratore
+def ammutinamento(punti):
+    msg_rischio = [
+            "Senti gli sguardi pesarti addosso. Qualcosa sta per spezzarsi.",
+            "I tuoi uomini parlano sottovoce quando ti avvicini. Non è un buon segno.",
+            "Di notte senti voci nella stiva. Smettono appena scendi a controllare.",
+            "Qualcuno ha scritto qualcosa sul bordo della tua cabina. È stato cancellato, ma ne restano le tracce.",
+            "I tuoi ordini vengono eseguiti. Ma con un secondo di ritardo di troppo."
+        ]
+    msg_ammutinamento = [
+        "Non c'è più niente da fare. I tuoi uomini ti guardano come si guarda un nemico.",
+        "Le catene che li tenevano legati alla tua autorità si sono spezzate. Uno ad uno abbandonano i loro posti.",
+        "Nessun grido, nessuna rissa. Solo il rumore dei loro passi che si allontanano. Questo è peggio.",
+        "Ti hanno già giudicato. La sentenza è silenziosa e definitiva.",
+        "La nave è ancora tua. Ma non c'è più nessuno disposto a farla andare avanti."
+    ]
     if punti > 1 and punti < 99:
-        stampa("Rischi ammutinamento")
+       stampa(rn.choice(msg_rischio))
+       stampa("Il rischio di ammutinamento è palpabile.")
+       return False
     elif punti > 100:
-        stampa("La tua ciurma si ammutina")
-        #TODO game over
+        stampa(rn.choice(msg_ammutinamento))
+        stampa("La tua ciurma si ammutina. Il viaggio termina qua.")
+        return True
+    else:
+        stampa("I tuoi uomini sono soddisfatti del loro capitano, non rischi l'ammutinamento")
+        return False
 
-# ------------- RICALCOLO -------------
+# ---------- RICALCOLO VIAGGIO ----------
 
 def ricalcolo():
     scontenti = 0
@@ -546,4 +578,12 @@ def ricalcolo():
 
     if scontenti > mezza_ciurma:
         viaggio["settimane totali"] += 1
-        #TODO spiegare perché
+        msg_allungo = [
+            "I tuoi uomini si muovono come fantasmi. Lenti, svuotati. La nave avanza, ma non abbastanza.",
+            "La rassegnazione è contagiosa quanto la peste. I remi pesano il doppio quando nessuno ci crede più.",
+            "Nessuno corre più agli ordini. Il viaggio si allunga, e tutti fingono di non sapere perché."
+        ]
+        stampa(rn.choice(msg_allungo))
+        stampa("La settimana si allunga di una settimana in quanto il morale di più della metà dei tuoi uomini è basso.")
+        return True
+    return False

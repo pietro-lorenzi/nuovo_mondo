@@ -1,6 +1,3 @@
-# Ho sistemato alcune cose perché mi serviva urgentemente andare avanti visto che domani non riesco a lavorare
-# La tua parte è praticamente finita, vedi tu se vuoi ritoccare qualcosina
-
 def ingaggia_eq():
     eq = {
         "marinaio": 0,
@@ -127,7 +124,7 @@ def provviste_eq():
             provviste["verdura"] = verdura
             spesa=True
 
-    return provviste, monete
+    return provviste
 
 def merci_eq(dobloni):
     merci = {
@@ -226,4 +223,18 @@ def merci_eq(dobloni):
                 merci["stoffa"] = stoffa
                 spesa = True
 
-    return merci, monete
+    return merci
+
+def introduzione():
+    # Qua scrivi una introduzione al gioco, come se fosse un libro
+    # Qualcosa per dare atmosfera a quello che verrà dopo
+    # Tipo: 
+    #       Per secoli, l’oceano a occidente è rimasto una distesa sconosciuta, avvolta da nebbie, correnti imprevedibili e storie mai confermate.
+    #       Le mappe finiscono molto prima di quelle acque, come se il mondo stesso avesse paura di ciò che si trova oltre.
+    #       Ora, con il vento che soffia verso l’Atlantico occidentale, una nuova spedizione è pronta a salpare. 
+    #       E il mare, silenzioso come sempre, aspetta.
+    # 
+    # Una cosa del genere con ChatGPT, basta che sia un introduzione al gioco e che mantenga un tono cupo e misterioso
+    # 
+    # Se vuoi mettici anche due colori con termcolor
+    pass

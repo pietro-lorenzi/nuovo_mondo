@@ -1,5 +1,6 @@
 import sys
 import time
+import os
 
 def stampa(testo, delay=0.04, capo=True): #funzione per stampare il testo lentamente, in modo più figo
     for i in testo:
@@ -20,3 +21,8 @@ def ciurma_accettabile(diz): #funzione per definire quali membri della ciurma so
 def calcola_ciurma(diz):
     ciurma = diz["marinaio"]["numero"] + diz["meccanico"]["numero"] + diz["medico"]["numero"] + diz["navigatore"]["numero"] + diz["cuoco"]["numero"]
     return ciurma
+
+def spazio():
+    print("Premi INVIO per continuare...")
+    input()
+    os.system("cls")

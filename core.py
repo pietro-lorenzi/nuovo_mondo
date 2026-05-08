@@ -3,7 +3,6 @@ import random as rn
 from time import sleep
 
 #TODO termcolor
-#TODO flag alabatro
 
 # ---------- STRUTTURE DATI ----------
 
@@ -111,7 +110,7 @@ viaggio = {
 def calcola_costo_equipaggio():
     costo_totale = 0
     for ruolo in equipaggio:
-        costo_totale += equipaggio[ruolo]["numero"] * equipaggio[ruolo]["costo"] * viaggio["settimane totali"]
+        costo_totale += equipaggio[ruolo]["numero"] * equipaggio[ruolo]["costo"]
     return costo_totale
 
 # --------------- EVENTI ---------------

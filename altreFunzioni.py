@@ -1,6 +1,7 @@
 import sys
 import time
 import os
+from termcolor import colored
 
 def stampa(testo, delay=0.04, capo=True): #funzione per stampare il testo lentamente, in modo più figo
     for i in testo:
@@ -26,3 +27,8 @@ def spazio():
     print("Premi INVIO per continuare...")
     input()
     os.system("cls")
+
+def messaggio_morte():
+    stampa(colored("GAME OVER", "red"), 0.3)
+    stampa("Nessuno saprà mai quanto lontano siete arrivati...", 0.08)
+    spazio()

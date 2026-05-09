@@ -12,44 +12,44 @@ def ingaggia_eq():
         marinaio=0
         while marinaio<1:
             try:
-                marinaio=int(input("\033[93m" + "quanti marinai vuoi?" + "\033[0m"))
+                marinaio=int(input("Quanti marinai vuoi portare con te, capitano?"))
             except:
                 print(("\033[91m" + "inserire un numero valido" + "\033[0m"))
         
         meccanico=0
         while meccanico<1:
             try:
-                meccanico=int(input("quanti meccanici vuoi?"))
+                meccanico=int(input("Quanti meccanici vuoi portare con te, capitano?"))
             except:
                 print(("\033[91m" + "inserire un numero valido" + "\033[0m"))
         
         medico=0
         while medico<1:
             try:
-                medico=int(input("quanti medici vuoi?"))
+                medico=int(input("Quanti medici vuoi prtare con te, capitano?"))
             except:
                 print(("\033[91m" + "inserire un numero valido" + "\033[0m"))
         
         cuoco=0
         while cuoco<1:
             try:
-                cuoco=int(input("quanti cuochi vuoi?"))
+                cuoco=int(input("Quanti cuochi vuoi prtare, capitano?"))
             except:
                 print(("\033[91m" + "inserire un numero valido" + "\033[0m"))     
         
         navigatore=0
         while navigatore<1:
             try:
-                navigatore=int(input("quanti navigatori vuoi?"))
+                navigatore=int(input("Quanti navigatori vuoi portare con te, capitano?"))
             except:
                 print(("\033[91m" + "inserire un numero valido" + "\033[0m"))   
         
         tot=marinaio+meccanico+medico+cuoco+navigatore
 
         if tot > 16:
-            print("\033[91m" + "hai superato il numero massimo di equipaggio" + "\033[0m")
+            print("\033[91m" + "La nave non può reggere così tante anime, capitano. Sedici è il limite. Riprova" + "\033[0m")
         else:
-            eq["marinaio"] = marinaio       # Ho aggiunto questa parte perché sennò il dizionario che mi restituivi era sempre vuoto
+            eq["marinaio"] = marinaio       
             eq["cuoco"] = cuoco
             eq["meccanico"] = meccanico
             eq["medico"] = medico
@@ -69,10 +69,10 @@ def provviste_eq():
     while not spesa:
         monete=2000
 
-        verdura = None # Ho messo sta roba del None perché sennò se inserisci un valore sbagliato (esempio: 2.3) ti dice che il valore non va bene ma non te lo richiede, va avanti lo stesso. così invece continua a richiedertelo finché non lo metti giusto
+        verdura = None 
         while verdura == None:
             try:
-                verdura=int(input("quanta verdura vuoi?"))
+                verdura=int(input("Quanta verdura carichi sulla nave, capitano?"))
                 if verdura < 0:
                     raise Exception # Ho messo che se il valore che inserisci è negativo e quindi minore di 0, il programma lancia l'eccezione, dà il messaggio di errore e rifà la domanda
             except:
@@ -81,7 +81,7 @@ def provviste_eq():
         frutta = None
         while frutta == None:
             try:
-                frutta=int(input("quanta frutta vuoi?"))
+                frutta=int(input("E la frutta? Senza, lo scorbuto vi attende. "))
                 if frutta < 0:
                     raise Exception
             except:
@@ -90,7 +90,7 @@ def provviste_eq():
         carne = None
         while carne == None:
             try:
-                carne=int(input("quanta carne vuoi?"))
+                carne=int(input("Quanta carne porti con te? Gli uomini hanno fame. "))
                 if carne < 0:
                     raise Exception
             except:
@@ -99,7 +99,7 @@ def provviste_eq():
         acqua = None
         while acqua == None:
             try:
-                acqua=int(input("quanti barili di acqua vuoi?"))
+                acqua=int(input("E l'acqua? Senza, morirete prima ancora di arrivare. "))
                 if acqua < 0:
                     raise Exception
             except:
@@ -115,16 +115,16 @@ def provviste_eq():
         monete=monete-costo_acqua
         
         if monete < 0:
-            print("\033[91m" + "sei andato in bancarotta" + "\033[0m")
+            print("\033[91m" + "Hai speso troppo, capitano. Riprova" + "\033[0m")
         
         else:
-            provviste["acqua"] = acqua      # Stesso discorso di prima
+            provviste["acqua"] = acqua      
             provviste["carne"] = carne
             provviste["frutta"] = frutta
             provviste["verdura"] = verdura
             spesa=True
+    return provviste, monete
 
-    return provviste
 
 def merci_eq(dobloni):
     merci = {
@@ -138,13 +138,14 @@ def merci_eq(dobloni):
 
     spesa = False
     while not spesa:
-            monete=dobloni # Monete non può essere ancora uguale a 2000 perché prima hai già comprato provviste, quindi lo mettiamo come argomento
+            
+            monete=dobloni 
    
-            medicinali = None # Stesso discorso di provviste
+            medicinali = None
             while medicinali == None:
                 try:
-                    medicinali=int(input("quanti medicinali vuoi?"))
-                    if medicinali < 0: # Uguale a provviste
+                    medicinali=int(input("Quante bottiglie di medicinale carichi? La malattia non avvisa. "))
+                    if medicinali < 0: 
                         raise Exception
                 except:
                     print(("\033[91m" + "inserire un numero valido" + "\033[0m"))   
@@ -152,7 +153,7 @@ def merci_eq(dobloni):
             armi = None
             while armi == None:
                 try:
-                    armi=int(input("quante armi vuoi?"))
+                    armi=int(input("Quante armi porti? Il mare non è l'unico pericolo. "))
                     if armi < 0:
                         raise Exception
                 except:
@@ -161,7 +162,7 @@ def merci_eq(dobloni):
             sale = None
             while sale == None:
                 try:
-                    sale=int(input("quanto sale vuoi?"))
+                    sale=int(input("Quanto sale vuoi?"))
                     if sale < 0:
                         raise Exception
                 except:
@@ -170,7 +171,7 @@ def merci_eq(dobloni):
             stoffa = None
             while stoffa == None:
                 try:
-                    stoffa=int(input("quanta stoffa vuoi?"))
+                    stoffa=int(input("Quanti teli di stoffa? Gli indigeni ne vanno matti. "))
                     if stoffa < 0:
                         raise Exception
                 except:
@@ -179,7 +180,7 @@ def merci_eq(dobloni):
             coltelli = None
             while coltelli == None:
                 try:
-                    coltelli=int(input("quanti coltelli vuoi?"))
+                    coltelli=int(input("I coltelli sono ottimi per barattare. Quanti ne porti?"))
                     if coltelli < 0:
                         raise Exception
                 except:
@@ -188,7 +189,7 @@ def merci_eq(dobloni):
             diamanti = None
             while diamanti == None:
                 try:
-                    diamanti=int(input("quanti diamanti vuoi?"))
+                    diamanti=int(input("E i diamanti? Brillano quanto le opportunità che ti aspettano. "))
                     if diamanti < 0:
                         raise Exception
                 except:
@@ -212,8 +213,9 @@ def merci_eq(dobloni):
             costo_diamanti=diamanti*1
             monete=monete-costo_diamanti
             
-            if monete < 0:
-                print("\033[91m" + "sei andato in bancarotta" + "\033[0m")
+            if monete<0:
+             print("\033[91m" + "Hai speso troppo, capitano. Riprova" + "\033[0m")
+
             else:
                 merci["armi"] = armi
                 merci["coltelli"] = coltelli
@@ -222,19 +224,18 @@ def merci_eq(dobloni):
                 merci["sale"] = sale
                 merci["stoffa"] = stoffa
                 spesa = True
-
-    return merci
+    return merci, monete
 
 def introduzione():
-    # Qua scrivi una introduzione al gioco, come se fosse un libro
-    # Qualcosa per dare atmosfera a quello che verrà dopo
-    # Tipo: 
-    #       Per secoli, l’oceano a occidente è rimasto una distesa sconosciuta, avvolta da nebbie, correnti imprevedibili e storie mai confermate.
-    #       Le mappe finiscono molto prima di quelle acque, come se il mondo stesso avesse paura di ciò che si trova oltre.
-    #       Ora, con il vento che soffia verso l’Atlantico occidentale, una nuova spedizione è pronta a salpare. 
-    #       E il mare, silenzioso come sempre, aspetta.
-    # 
-    # Una cosa del genere con ChatGPT, basta che sia un introduzione al gioco e che mantenga un tono cupo e misterioso
-    # 
-    # Se vuoi mettici anche due colori con termcolor
-    pass
+   print("\033[94m" + "Per secoli, l'oceano a occidente e' rimasto una distesa sconosciuta." + "\033[0m")
+   print("\033[94m" + "Le mappe finiscono molto prima di quelle acque, come se il mondo stesso avesse paura di cio' che si trova oltre." + "\033[0m")
+   print("\033[94m" + "Ora, con il vento che soffia verso l'Atlantico occidentale, una nuova spedizione e' pronta a salpare." + "\033[0m")
+   print("\033[94m" + "E il mare, silenzioso come sempre, aspetta." + "\033[0m")
+
+
+
+
+introduzione()
+eq=ingaggia_eq()
+provviste, monete_rimaste=provviste_eq()
+merci, monete_rimaste=merci_eq(monete_rimaste)

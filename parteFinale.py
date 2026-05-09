@@ -53,7 +53,6 @@ def RichiestaFuoco(merci):
     else:
         return False        
     
-
 #Baratto
 def Baratto(merci):
     stampa("La nave entra nella baia senza resistenza.")
@@ -391,8 +390,6 @@ Oggetti che possiedi,  dopo lo scambio:
 
     return merci
 
-
-
 #Tradimento
 def tradimento(merci,  equipaggio, albatro_avvistato, albatro_ucciso):
     if merci["armi"]["numero"] > 0:
@@ -499,7 +496,6 @@ def tradimento(merci,  equipaggio, albatro_avvistato, albatro_ucciso):
                 stampa("Devi inserire una delle 2 opzioni precedenti!")
     else:
         return merci
-    
 
 #Epilogo
 def epilogo(equipaggio, provviste, merci, viaggio, albatro_avvistato, albatro_ucciso, costo_equipaggio_iniziale, costo_merci_iniziali, costo_provviste_iniziali):
@@ -567,14 +563,16 @@ valori di ora:
     -monete che si devono ai membri dell'equipaggio dopo il viaggio --> {costo_equipaggio_finale}.""")
 
     if monete_residue > costo_equipaggio_finale:
-        return 1
+        monete_residue -= costo_equipaggio_finale
+        return 1, monete_residue
 
     stampa("Le tue monete non sono abbastanza per pagare l'equipaggio! Puoi accettare però di mettere all'asta la tua nave, così da provare a salvarti!")
     scelta = input("Vuoi accettare? (s/n)>> ").strip().lower()
     errore = True
     while errore:
         if scelta == "n":
-            return 0
+            monete_residue -= costo_equipaggio_finale
+            return 0, monete_residue
         elif scelta == "s":
             errore = False
         else:
@@ -602,12 +600,13 @@ valori di ora:
         while errore:
             scelta = input("(s/n) >> ").strip().lower()
             if scelta == "s":
-                if offerta + monete_residue > costo_equipaggio_finale:
-                    return 2
-                elif offerta + monete_residue == costo_equipaggio_finale:
-                    return 3
+                monete_residue += offerta
+                if monete_residue > costo_equipaggio_finale:
+                    return 2, monete_residue - costo_equipaggio_finale
+                elif monete_residue == costo_equipaggio_finale:
+                    return 3, monete_residue - costo_equipaggio_finale
                 else:
-                    return 4
+                    return 4, monete_residue -costo_equipaggio_finale
             elif scelta == "n":
                 stampa("Hai rifiutato l'offerta. Passiamo a quella successiva.")
                 contatore += 1
@@ -616,14 +615,14 @@ valori di ora:
                 stampa("Devi scegliere una delle 2 opzioni!")
 
 
-
 #carica e salva
-def Salva(equipaggio, provviste, merci, viaggio):
+def Salva(equipaggio, provviste, merci, viaggio, eventi_accaduti):
     dati_da_salvare = {
         "equipaggio": equipaggio,
         "provviste": provviste,
         "merci": merci,
-        "viaggio": viaggio
+        "viaggio": viaggio,
+        "eventi accaduti": eventi_accaduti
     }
     with open("Salvataggi.txt", "w", encoding="utf-8") as file:
         json.dump(dati_da_salvare, file)

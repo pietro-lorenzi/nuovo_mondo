@@ -1,6 +1,7 @@
 from altreFunzioni import *
 import random as rn
 from time import sleep
+from termcolor import colored, cprint
 
 #TODO termcolor
 
@@ -8,7 +9,7 @@ from time import sleep
 
 equipaggio = {
     "marinaio": {
-        "numero": 0, #con numero intendo quanti individui di quel mestiere abbiamo
+        "numero": 0,
         "costo": 10,
         "morale": []
     },
@@ -102,7 +103,9 @@ viaggio = {
     "delta_morale": 0,
     "scorta dimezzata": False,
     "conta alabatro": 0,
-    "eventi accaduti": []
+    "eventi accaduti": [],
+    "alabatro avvistato": False,
+    "alabatro ucciso": False
 }
 
 # ---------- CALCOLO COSTO ----------
@@ -124,7 +127,6 @@ def uomo_in_mare():
     stampa("Lentamente, dall'orizzonte, un navigatore scorge un onda anomala.")
     stampa("Prima che chiunque possa reagire, l'onda si abbatte violentemente sulla nave.", 0.05)
     stampa(f"Un {morto} cade tra le fauci dell'oceano.")
-    sleep(2)
     stampa("Nessuno ha più il coraggio di guardare indietro...", 0.1)
 
 def verdura_in_mare():
@@ -181,7 +183,7 @@ def pesca_miracolosa():
     stampa("...", 0.5)
 
 def tempesta_miracolosa():
-    stampa("Una tempesta viene avvistata in lontananza, ma sta volta è diverso.")
+    stampa("Una tempesta viene avvistata in lontananza, ma questa volta è diverso.")
     acqua = rn.randint(11,20)
     provviste["acqua"]["numero"] += acqua
     stampa("Non c'è vento a precederla. Non c'è rabbia nell'aria.")
@@ -191,7 +193,7 @@ def tempesta_miracolosa():
     stampa("Se sopravvivi alla tempesta, non ringraziare, perché significa che ", capo=False)
     stampa("non è finita.", 0.2)
 
-def venti_favorevoli():
+def venti_favorevoli(): #TODO SISTEMARE NARRATORE
     stampa("In una fredda mattina ti accorgi che dei venti favorevoli stanno spingendo la nave più velocemente.")
     stampa("L'equipaggio ne è felice, festeggia perché arriverai prima a destinazione.")
     viaggio["settimane totali"] -= 1
@@ -296,7 +298,7 @@ def avvistamento_scialuppa():
         elif scelta == "no":
             stampa("Salvare altre vite non è una vostra priorità e decidete di proseguire oltre.")
             stampa("Guardando indietro vi sembra quasi che uno degli uomini vi stia fissando sorridendo.")
-            stampa("Non si torna indietro.")
+            stampa("La decisione è ormai presa.")
             errore = False
 
 def epidemia():
@@ -447,12 +449,12 @@ def calcolo_scorte_viaggio():
     viaggio["scorta dimezzata"] = False
     for i in provviste:
         if provviste[i]["numero"] <= 0:
-            stampa(f"Hai esaurito le razioni di {i}, la tua ciurma non ne sarà felice...")
+            stampa(f"Hai esaurito le razioni di {i}, la tua ciurma non ne sarà felice...", 0.02)
             viaggio["delta_morale"] -= 10
         
         elif provviste[i]["numero"] < provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"]):
-            stampa(f"Per completare il viaggio avresti bisogno di {provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"])} unità di {i}, ma tu ne possiedi solo {provviste[i]["numero"]}")
-            stampa(f"Intendi dimezzarle?")
+            stampa(f"Per completare il viaggio avresti bisogno di {provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"])} unità di {i}, ma tu ne possiedi solo {provviste[i]["numero"]}", 0.02)
+            stampa(f"Intendi dimezzarle?", 0.02)
             errore = True
             while errore:
                 scelta = input(">> ").strip().lower()
@@ -463,11 +465,11 @@ def calcolo_scorte_viaggio():
                 elif scelta in ["no", "n"]:
                     errore = False
                 else:
-                    stampa("Scelta non accettabile")
+                    stampa("Scelta non accettabile", 0.02)
         
         elif provviste[i]["numero"] > provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"]):
-            stampa(f"Per completare il viaggio avresti bisogno di {provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"])} unità di {i}, mentre tu ne hai {provviste[i]["numero"]} unità")
-            stampa("Intendi raddoppiare le razioni?")
+            stampa(f"Per completare il viaggio avresti bisogno di {provviste[i]["consumo"]*ciurma*(viaggio["settimane totali"] - viaggio["settimana attuale"])} unità di {i}, mentre tu ne hai {provviste[i]["numero"]} unità", 0.02)
+            stampa("Intendi raddoppiare le razioni?", 0.02)
             errore = True
             while errore:
                 scelta = input(">> ").strip().lower()
@@ -477,7 +479,7 @@ def calcolo_scorte_viaggio():
                 elif scelta in ["no", "n"]:
                     errore = False
                 else:
-                    stampa("Scelta non accettabile")
+                    stampa("Scelta non accettabile", 0.02)
 
 # --------------- MORALE ---------------
 
@@ -487,7 +489,7 @@ def aggiornamento_morale():
             equipaggio[ruolo]["morale"][i] += viaggio["delta_morale"]
     
     for ruolo in equipaggio:
-        for i in range(equipaggio[ruolo]["numero"][:]):
+        for i in range(equipaggio[ruolo]["numero"]):
             if equipaggio[ruolo]["morale"][i] <= 0:
                 equipaggio[ruolo]["numero"] -= 1
                 equipaggio[ruolo]["morale"].remove(0)
@@ -502,39 +504,51 @@ def aggiunta_morale():
 # -------------- RIEPILOGO -------------
 
 def riepilogo():
-    stampa("La ciurma ancora in vita è composta da:")
+    stampa(colored("La ciurma ancora in vita è composta da:", "cyan"))
+    conta = 1
     for ruolo in equipaggio:
         for i in range(equipaggio[ruolo]["numero"]):
-            stampa(f"{i} - {ruolo} - {equipaggio[ruolo]["morale"][i]}", 0.02)
+            stampa(f"{conta} - {ruolo.capitalize()} - Morale: {equipaggio[ruolo]["morale"][i]}", 0.02)
+            conta += 1
+    print()
 
-    stampa("Le scorte di cibo residue sono composte da:")
+    stampa(colored("Le scorte di cibo residue sono composte da:", "cyan"))
     for scorta in provviste:
-        stampa(f"{scorta} - {provviste[scorta]["numero"]} unità", 0.02)
+        stampa(f"{scorta.capitalize()} - {provviste[scorta]["numero"]:.0f} unità", 0.02)
+    print()
 
-    stampa("Le merci di scambio rimanenti sono:")
+    stampa(colored("Le merci di scambio rimanenti sono:", "cyan"))
     for merce in merci:
-        stampa(f"{merce} - {merci[merce]["numero"]} unità", 0.02)
+        stampa(f"{merce.capitalize()} - {merci[merce]["numero"]:.0f} unità", 0.02)
 
 # ------------ AMMUTINAMENTO -----------
 
-def punti_ammutinamento(alabatro): #TODO spiegare perché si rischia l'ammutinamento
+def punti_ammutinamento(alabatro_visto, alabatro_ucciso):
     punti = 0
+    cprint("AMMUTINAMENTO", "red")
     if viaggio["scorta dimezzata"]:
         punti += 30
+        print("Razioni ridotte: L'equipaggio ha ricevuto meno cibo del previsto, la fame aumenta tensione e malcontento.")
     if equipaggio["cuoco"]["numero"] == 0:
         punti += 30
-    if alabatro == True:
+        print("Mancanza del cuoco: Senza nessuno a valorizzare il cibo, la qualità dei pasti peggiora e il morale cala.")
+    if alabatro_visto and not alabatro_ucciso:
         punti += 30
-    if alabatro == False:
+        print("Albatro ucciso: Un presagio negativo: averlo abbattuto viene visto come un segno di sfortuna.")
+    if alabatro_ucciso:
         punti -= 20
+        print("Albatro avvistato ma non ucciso: Il segno viene interpretato con ottimismo e rispetto, riducendo la tensione a bordo.")
     if calcola_ciurma(equipaggio) > 12:
         punti += 30
+        print("Troppi uomini a bordo: La nave è sovraffollata, aumentano conflitti, disordine e instabilità.")
     if viaggio["settimana attuale"] > 8:
         x = viaggio["settimana attuale"] - 8
         punti += 10*x
+        print("Viaggio più lungo del previsto: La permanenza in mare logora la disciplina e aumenta la stanchezza dell’equipaggio.")
     elif viaggio["settimane totali"] < 8:
         x = 8 - viaggio["settimane totali"]
         punti -= 10*x
+        print("Viaggio più corto del previsto: Meno tempo in mare riduce lo stress generale e mantiene più stabile il morale.")
 
     return punti
 

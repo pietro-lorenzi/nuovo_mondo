@@ -4,19 +4,21 @@ from core import avvistamento_alabatro
 from altreFunzioni import *
 from time import sleep
 from termcolor import colored
+from core import *
 
 #RichiestaFuoco
 def RichiestaFuoco(merci):
     stampa("Improvvisamente, dalla cima dell'albero maestro, uno dei tuoi uomini urla 'ECCOLO! IL NUOVO MONDO! LO VEDO!'")
     stampa("Avvicinandovi, però, scorgete un particolare.")
     stampa("Ad aspettarvi non ci sono ricchezze e tesori, ma bensì un grande gruppo di indigeni, che vi scrutano con dubbio.")
-    stampa("L'attenzione passa in un attimo dagli indigeni a te. I tuoi uomini aspettano indicazioni. Alcuni sono già corsi ad armarsi. Altri predicano dialogo e pace. Ma, in fondo, sanno che la decisione finale spetta al capitano. Apri il fuoco?")
+    stampa("L'attenzione passa in un attimo dagli indigeni a te. I tuoi uomini aspettano indicazioni. Alcuni sono già corsi ad armarsi. Altri predicano dialogo e pace. Ma, in fondo, sanno che la decisione finale spetta al capitano. Apri il fuoco? (s/n)")
+    
     errore = True
     if merci["armi"]["numero"] > 0: 
         while errore:
             try:
                 richiestaFuoco = input("").strip().lower()
-
+                os.system("cls")
                 match richiestaFuoco:
                     case "s":
                         stampa("Tutta questa strada, tutte queste intemperie, per decidere di erigere il proprio impero sul sangue...")
@@ -43,7 +45,7 @@ def RichiestaFuoco(merci):
                         stampa("Resti immobile.")
                         stampa("Il dito si allontana dal grilletto.")
                         stampa("E il mare smette di sembrare un confine.")
-                        stampa("SCELTA SAGGIA")
+                        cprint("SCELTA SAGGIA", "green")
                         stampa("Non tutte le scoperte richiedono sangue.")
                         return False
                     case _:
@@ -77,10 +79,12 @@ def Baratto(merci):
     stampa("L'uomo apre le mani.")
     stampa("Mostra oggetti. Perle, manufatti, spezie.")
     stampa("Poi aspetta.")
-    stampa("Si sta fidando di te.")
     stampa("Ti dà fiducia.")
     stampa("Come te ne hai data a loro rimuovendo il dito dal grilletto.")
     stampa("E ora sta a te scegliere con cosa scambiare le merci proposte.")
+    invio()
+    cprint("BARATTO", "cyan")
+    print()
 
     for risorsa in merci.keys():
         match risorsa:
@@ -88,7 +92,9 @@ def Baratto(merci):
             case "sale":
                 if  merci["sale"]["numero"] > 0:
                         errore = True
-                        stampa(f"""è ora di barattare il sale, le opzioni che ti offre il capo tribù sono queste:
+                        cprint("SALE", "yellow")
+                        print()
+                        print(f"""È ora di barattare il sale, le opzioni che ti offre il capo tribù sono queste:
 1) 1 perla = 0.5 sacchi di sale --> max {int(2*merci["sale"]["numero"])} perle ottenibili;
 2) 1 manufatto = 0.5 sacchi di sale --> max {int(2*merci["sale"]["numero"])} manufatti ottenibili;
 3) 1 barattolo di spezie = 1 sacco di sale --> max {int(1*merci["sale"]["numero"])} spezie ottenibili.
@@ -163,7 +169,10 @@ Valore degli oggetti (che possiedi):
             case "stoffa":
                 if  merci["stoffa"]["numero"] > 0:
                     errore = True
-                    stampa(f"""è ora di barattare la stoffa, le opzioni che ti offre il capo tribù sono queste:
+                    os.system("cls")
+                    cprint("STOFFA", "yellow")
+                    print()
+                    print(f"""È ora di barattare la stoffa, le opzioni che ti offre il capo tribù sono queste:
 1) 1 perla = 5 teli di stoffa --> max {int(merci["stoffa"]["numero"]//5)} perle ottenibili;
 2) 1 manufatto = 7 teli di stoffa --> max {int(merci["stoffa"]["numero"]//7)} manufatti ottenibili;
 3) 1 barattolo di spezie = 3 teli di stoffa --> max {int(merci["stoffa"]["numero"]//3)} spezie ottenibili.
@@ -235,7 +244,10 @@ Valore degli oggetti (che possiedi):
             case "coltelli":
                 if  merci["coltelli"]["numero"] > 0:
                     errore = True
-                    stampa(f"""è ora di barattare i coltelli, le opzioni che ti offre il capo tribù sono queste:
+                    os.system("cls")
+                    cprint("COLTELLI", "yellow")
+                    print()
+                    print(f"""È ora di barattare i coltelli, le opzioni che ti offre il capo tribù sono queste:
 1) 1 perla = 1 coltello --> max {int(merci["coltelli"]["numero"]//1)} perle ottenibili;
 2) 1 manufatto = 3 coltelli --> max {int(merci["coltelli"]["numero"]//3)} manufatti ottenibili;
 3) 1 barattolo di spezie = 6 coltelli --> max {int(merci["coltelli"]["numero"]//6)} spezie ottenibili.
@@ -306,7 +318,10 @@ Valore degli oggetti (che possiedi):
             case "diamanti":
                 if  merci["diamanti"]["numero"] > 0:
                     errore = True
-                    stampa(f"""è ora di barattare i diamanti, le opzioni che ti offre il capo tribù sono queste:
+                    os.system("cls")
+                    cprint("DIAMANTI", "yellow")
+                    print()
+                    print(f"""È ora di barattare i diamanti, le opzioni che ti offre il capo tribù sono queste:
 1) 1 perla = 2 diamanti --> max {int(merci["diamanti"]["numero"]//2)} perle ottenibili;
 2) 1 manufatto = 4 diamanti --> max {int(merci["diamanti"]["numero"]//4)} manufatti ottenibili;
 3) 1 barattolo di spezie = 4 diamanti --> max {int(merci["diamanti"]["numero"]//4)} spezie ottenibili.
@@ -375,7 +390,7 @@ Valore degli oggetti (che possiedi):
                                 stampa("Devi inserire un'opzione o una quantità valida!")
 
     stampa(f"""
-Oggetti che possiedi,  dopo lo scambio:
+Oggetti che possiedi, dopo lo scambio:
 - Sale --> {merci["sale"]["numero"]};
 - Stoffa --> {merci["stoffa"]["numero"]};
 - Coltelli --> {merci["coltelli"]["numero"]};
@@ -384,10 +399,9 @@ Oggetti che possiedi,  dopo lo scambio:
 - Manufatti --> {merci["manufatti"]["numero"]};
 - Spezie --> {merci["spezie"]["numero"]}.
 """)
-    if merci["sale"]["numero"] == 0 and merci["stoffa"]["numero"] == 0 and merci["coltelli"]["numero"] == 0 and merci["diamanti"]["numero"] == 0:
-        stampa("Non hai risorse scambiabili in questo momento, quindi non puoi barattare!")
-        return merci 
-
+    
+    stampa("Non hai risorse scambiabili in questo momento, quindi non puoi barattare ulteriormente!")
+    os.system("cls")
     return merci
 
 #Tradimento
@@ -424,7 +438,7 @@ def tradimento(merci,  equipaggio, albatro_avvistato, albatro_ucciso):
         stampa("Ma nemmeno dire tutta la verità.")
         stampa(f"""
         -perle in possesso --> {merci["perle"]["numero"]};
-        -numero armi in  possesso --> {merci["armi"]["numero"]};
+        -numero armi in possesso --> {merci["armi"]["numero"]};
         -numero di perle in caso di scambio --> {(merci["armi"]["numero"]*30)+merci["perle"]["numero"]}.""")
         while errore:
             try:
@@ -498,7 +512,7 @@ def tradimento(merci,  equipaggio, albatro_avvistato, albatro_ucciso):
         return merci
 
 #Epilogo
-def epilogo(equipaggio, provviste, merci, viaggio, albatro_avvistato, albatro_ucciso, costo_equipaggio_iniziale, costo_merci_iniziali, costo_provviste_iniziali):
+def epilogo(equipaggio, provviste, merci, viaggio, albatro_avvistato, albatro_ucciso, monete_rimaste):
     stampa("""Prima di ripartire il capo tribù rifornisce il giocatore di scorte che bastano a coprire 3 settimane di 
 viaggio.
 Il ritorno non è in patria, ma verso l'isola civilizzata più vicina, nella quale si 
@@ -528,7 +542,7 @@ potranno rivendere le merci acquistate nel nuovo mondo.
             stampa("Il viaggio di ritorno durerà 2 settimana.")
             viaggio["settimane totali"] += 2
 
-
+    costo_equipaggio_finale = calcola_costo_equipaggio(equipaggio, viaggio)
     #valori delle merci prima e ora
     monete_iniziali = 2000
     moltiplicatore = choice([0.5, 1, 2])
@@ -545,6 +559,7 @@ valori di ora:
 -perle --> {merci["perle"]["prezzo"]} monete d'oro;
 -manufatti --> {merci["manufatti"]["prezzo"]} monete d'oro;
 -spezie --> {merci["spezie"]["prezzo"]} monete d'oro.""")
+    invio()
     
     # calcolo dei profitti
     profitto = (
@@ -552,9 +567,8 @@ valori di ora:
         merci["manufatti"]["numero"] * merci["manufatti"]["prezzo"] +
         merci["spezie"]["numero"] * merci["spezie"]["prezzo"]
     )
-    monete_iniziali -= costo_merci_iniziali + costo_provviste_iniziali
-    monete_residue = profitto + monete_iniziali
-    costo_equipaggio_finale = costo_equipaggio_iniziale * viaggio["settimane totali"]
+
+    monete_residue = profitto + monete_rimaste
 
     stampa(f"""Ecco qualche rapido calcolo eseguito dal contabile del villaggio:
     -profitto --> {profitto};
@@ -615,21 +629,60 @@ valori di ora:
                 stampa("Devi scegliere una delle 2 opzioni!")
 
 
-#carica e salva
-def Salva(equipaggio, provviste, merci, viaggio, eventi_accaduti):
+#--------------------------------------------------------------------------------------------
+
+
+def Salva(equipaggio, provviste, merci, viaggio):
+    lista_slot = ["saveSlot1.txt", "saveSlot2.txt", "saveSlot3.txt"]
+    print("Su che pagina del diario intendi scrivere?")
+    print("1 - Prima pagina")
+    print("2 - Seconda pagina")
+    print("3 - Terza pagina")
+    errore = True
+    while errore:
+        try:
+            pagina = int(input(">> "))
+            if pagina < 1 or pagina > 3:
+                raise Exception
+            else:
+                errore = False
+        except:
+            cprint("ERRORE: Pagina non trovata.")
+    
+    slot = lista_slot[pagina-1]
+
     dati_da_salvare = {
         "equipaggio": equipaggio,
         "provviste": provviste,
         "merci": merci,
         "viaggio": viaggio,
-        "eventi accaduti": eventi_accaduti
     }
-    with open("Salvataggi.txt", "w", encoding="utf-8") as file:
+    with open(slot, "w", encoding="utf-8") as file:
         json.dump(dati_da_salvare, file)
     return True
 
 
 def Carica():
-    with open("Salvataggi.txt", "r", encoding="utf-8") as file:
-        dati = json.load(file)
-    return dati["equipaggio"], dati["provviste"], dati["merci"], dati["viaggio"]
+    lista_slot = ["saveSlot1.txt", "saveSlot2.txt", "saveSlot3.txt"]
+    print("Da che pagina del diario vuoi riprendere a scrivere?")
+    print("1 - Prima pagina")
+    print("2 - Seconda pagina")
+    print("3 - Terza pagina")
+    errore = True
+    while errore:
+        try:
+            pagina = int(input(">> "))
+            if pagina < 1 or pagina > 3:
+                raise Exception
+            else:
+                errore = False
+        except:
+            cprint("ERRORE: Pagina non trovata.")
+
+    slot = lista_slot[pagina-1]
+    try:
+        with open(slot, "r", encoding="utf-8") as file:
+            dati = json.load(file)
+    except:
+        return False
+    return dati

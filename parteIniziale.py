@@ -14,7 +14,7 @@ def ingaggia_eq():
  
     cprint("Ogni spedizione ha bisogno di uomini disposti a seguirti oltre l'orizzonte.", "cyan")
     cprint("Marinai, medici, navigatori, meccanici e cuochi : scegli con attenzione chi farà parte della tua spedizione.", "cyan")
-    cprint("Ogni membro della ciurma richiederà una paga proporzionata alle proprie capacità.", "cyan")
+    cprint(f"Ogni membro della ciurma richiederà una paga proporzionata alle proprie capacità, e dovrai farti bastare le tue {colored("2000 monete", "yellow")}", "cyan")
     cprint("Ricorda: avere più uomini non significa avere uomini migliori.", "cyan")
     print()
  
@@ -113,7 +113,7 @@ def provviste_eq(numero):
                 if verdura < 0:
                     raise Exception
             except:
-                print(("Inserire un numero valido", "red"))   
+                cprint(("Inserire un numero valido", "red"))   
 
         frutta = None
         while frutta == None:
@@ -125,7 +125,7 @@ def provviste_eq(numero):
                 if frutta < 0:
                     raise Exception
             except:
-                print(("Inserire un numero valido", "red"))
+                cprint(("Inserire un numero valido", "red"))
 
         carne = None
         while carne == None:
@@ -137,7 +137,7 @@ def provviste_eq(numero):
                 if carne < 0:
                     raise Exception
             except:
-                print(("Inserire un numero valido", "red"))
+                cprint(("Inserire un numero valido", "red"))
 
         acqua = None
         while acqua == None:
@@ -149,7 +149,7 @@ def provviste_eq(numero):
                 if acqua < 0:
                     raise Exception
             except:
-                print(("Inserire un numero valido", "red"))   
+                cprint(("Inserire un numero valido", "red"))   
 
         costo_verdura=verdura*0.5
         monete=monete-costo_verdura
@@ -170,7 +170,6 @@ def provviste_eq(numero):
             provviste["carne"] = carne
             provviste["frutta"] = frutta
             provviste["verdura"] = verdura
-            os.system("cls")
 
             spesa=True
     return provviste
@@ -292,7 +291,6 @@ def merci_eq(dobloni):
                 merci["medicinale"] = medicinali
                 merci["sale"] = sale
                 merci["stoffa"] = stoffa
-                os.system("cls")
                 spesa = True
     return merci
  
@@ -304,7 +302,7 @@ def introduzione():
     stampa("Il mare separa i codardi dagli esploratori… e spesso seppellisce entrambi nello stesso modo.")
     stampa("Ora una nave attende i tuoi ordini.")
     stampa("E oltre le onde ti aspetta un mondo che non sa ancora il tuo nome.")
-    spazio()
+    invio()
  
 def menu():
     cprint(figlet_format("NUOVO MONDO"), "blue")

@@ -1,9 +1,9 @@
 import sys
 import time
 import os
-from termcolor import colored
+from termcolor import colored, cprint
 
-def stampa(testo, delay=0.04, capo=True): #funzione per stampare il testo lentamente, in modo più figo
+def stampa(testo, delay=0.04, capo=True):
     for i in testo:
         sys.stdout.write(i)
         sys.stdout.flush()
@@ -11,7 +11,7 @@ def stampa(testo, delay=0.04, capo=True): #funzione per stampare il testo lentam
     if capo:
         print()
 
-def ciurma_accettabile(diz): #funzione per definire quali membri della ciurma sono effettivamente presenti
+def ciurma_accettabile(diz):
     ciurma = ["marinaio", "cuoco", "meccanico", "medico", "navigatore"]
     acc = []
     for i in ciurma:
@@ -23,7 +23,7 @@ def calcola_ciurma(diz):
     ciurma = diz["marinaio"]["numero"] + diz["meccanico"]["numero"] + diz["medico"]["numero"] + diz["navigatore"]["numero"] + diz["cuoco"]["numero"]
     return ciurma
 
-def spazio():
+def invio():
     print("Premi INVIO per continuare...")
     input()
     os.system("cls")
@@ -31,4 +31,18 @@ def spazio():
 def messaggio_morte():
     stampa(colored("GAME OVER", "red"), 0.3)
     stampa("Nessuno saprà mai quanto lontano siete arrivati...", 0.08)
-    spazio()
+    invio()
+
+def sceltaSiNo():
+    errore = True
+    while errore:
+        azione = input("").strip().lower()
+        if azione in ["si", "yes", "y", "s"]:
+            azione = "s"
+            errore = False
+        elif azione in ["no", "n"]:
+            azione = "n"
+            errore = False
+        else:
+            cprint("Scelta non accettabile", "red")
+    return azione

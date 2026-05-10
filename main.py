@@ -3,6 +3,7 @@ from core import *
 from parteIniziale import *
 from parteFinale import *
 from termcolor import colored
+import sys
 
 def ingaggio_completato():
     diz = ingaggia_eq()
@@ -86,8 +87,8 @@ if azione == 1:
 
 if azione == 3:
     cprint("Il capitano abbandona i suoi uomini.", "red")
-    invio() 
-    exit()
+    invio()
+    sys.exit()
 
 def evento_isola():
     return avvistamento_isola(viaggio["alabatro ucciso"])
